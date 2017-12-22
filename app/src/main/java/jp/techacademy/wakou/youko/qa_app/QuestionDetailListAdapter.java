@@ -8,12 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class QuestionDetailListAdapter extends BaseAdapter {
+    public Context questionListC;
+    public String favoT;
+    public String favoM;
+    public int favoNum = 0;
+
     private final static int TYPE_QUESTION = 0;
     private final static int TYPE_ANSWER = 1;
 
@@ -23,6 +31,7 @@ public class QuestionDetailListAdapter extends BaseAdapter {
     public QuestionDetailListAdapter(Context context, Question question) {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mQustion = question;
+        questionListC = context;
     }
 
     @Override
@@ -87,6 +96,29 @@ public class QuestionDetailListAdapter extends BaseAdapter {
 
             TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
             nameTextView.setText(name);
+
+            final Button favoBT = (Button) convertView.findViewById(R.id.favoBT);
+            favoBT.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    favoT = "お気に入り";
+                    Map<String,Integer> data = new HashMap<String,Integer>();
+                    if(favoNum == 0){
+                        favoNum = 1;
+                        data.put("favo",favoNum);
+                        favoM = "お気に入りに登録しました";
+                        QuestionListActivity.favoAdd(questionListC,favoT,favoM);
+                        favoBT.setBackgroundResource(R.drawable.favo);
+
+                    }else{
+                        favoNum = 0;
+                        data.put("favo",favoNum);
+                        favoM = "お気に入りを解除しました";
+                        QuestionListActivity.favoAdd(questionListC,favoT,favoM);
+                        favoBT.setBackgroundResource(R.drawable.favo_n);
+                    }
+
+                }
+            });
         }
         return convertView;
     }
