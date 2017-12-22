@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class QuestionsListAdapter extends BaseAdapter {
-    public QuestionListActivity questionListC;
+    public Context questionListC;
     public String favoT;
     public String favoM;
     public int favoNum = 0;
@@ -40,9 +40,9 @@ public class QuestionsListAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInflater = null;
     private ArrayList<Question>mQuestionArrayList;
     public QuestionsListAdapter(Context context){
+        questionListC = context;
         mLayoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
     @Override
     public int getCount(){
         return mQuestionArrayList.size();
@@ -55,6 +55,8 @@ public class QuestionsListAdapter extends BaseAdapter {
     public long getItemId(int position){
         return position;
     }
+//    public void aaa(Context context){
+//    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         if(convertView == null){
@@ -74,6 +76,7 @@ public class QuestionsListAdapter extends BaseAdapter {
         favoData.setVisibility(View.GONE);
 
         final Button favoBT = (Button)convertView.findViewById(R.id.favobt);
+
         favoBT.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 favoT = "お気に入り";
@@ -82,14 +85,14 @@ public class QuestionsListAdapter extends BaseAdapter {
                      favoNum = 1;
                     data.put("favo",favoNum);
                     favoM = "お気に入りに登録しました";
-                    questionListC.favoAdd(questionListC,favoT,favoM);
+                    QuestionListActivity.favoAdd(questionListC,favoT,favoM);
                     favoBT.setBackgroundResource(R.drawable.favo);
 
                 }else{
                     favoNum = 0;
                     data.put("favo",favoNum);
                     favoM = "お気に入りを解除しました";
-                    questionListC.favoAdd(questionListC,favoT,favoM);
+                    QuestionListActivity.favoAdd(questionListC,favoT,favoM);
                     favoBT.setBackgroundResource(R.drawable.favo_n);
                 }
                 Log.d("test", "テスト実行");
