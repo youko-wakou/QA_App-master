@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,6 +120,7 @@ public class QuestionDetailListAdapter extends BaseAdapter {
                         favoBT.setBackgroundResource(R.drawable.favo_n);
                     }
 
+                    QuestionDetailActivity.addFavo(data,questionListC);
                 }
             });
         }

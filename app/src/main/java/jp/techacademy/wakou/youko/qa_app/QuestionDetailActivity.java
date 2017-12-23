@@ -1,5 +1,6 @@
 package jp.techacademy.wakou.youko.qa_app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by appu2 on 2017/12/20.
@@ -27,6 +29,12 @@ public class QuestionDetailActivity extends AppCompatActivity{
     private QuestionDetailListAdapter mAdapter;
 
     private DatabaseReference mAnswerRef;
+    static void addFavo(Map data, Context context){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH);
+
+        favoRef.push().setValue(data,context);
+    }
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {

@@ -61,7 +61,7 @@ public class FavoriteAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void  setmQuestionArrayList(ArrayList<Question>questionArrayList){
+    public void  setQuestionArrayList(ArrayList<Question>questionArrayList){
         mQuestionArrayList = questionArrayList;
     }
 }
