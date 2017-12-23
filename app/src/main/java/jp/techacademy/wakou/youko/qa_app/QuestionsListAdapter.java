@@ -32,15 +32,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class QuestionsListAdapter extends BaseAdapter {
-    public Context questionListC;
-    public String favoT;
-    public String favoM;
-    public int favoNum = 0;
+//    public Context questionListC;
+//    public String favoT;
+//    public String favoM;
+//    public int favoNum = 0;
 //    QuestionListActivity activityQ;
     private LayoutInflater mLayoutInflater = null;
     private ArrayList<Question>mQuestionArrayList;
     public QuestionsListAdapter(Context context){
-        questionListC = context;
+//        questionListC = context;
         mLayoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
@@ -72,32 +72,32 @@ public class QuestionsListAdapter extends BaseAdapter {
         int resNum = mQuestionArrayList.get(position).getAnswers().size();
         resText.setText(String.valueOf(resNum));
 
-        TextView favoData = (TextView)convertView.findViewById(R.id.favoData);
-        favoData.setVisibility(View.GONE);
+//        TextView favoData = (TextView)convertView.findViewById(R.id.favoData);
+//        favoData.setVisibility(View.GONE);
 
-        final Button favoBT = (Button)convertView.findViewById(R.id.favobt);
+//        final Button favoBT = (Button)convertView.findViewById(R.id.favobt);
 
-        favoBT.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                favoT = "お気に入り";
-                Map<String,Integer> data = new HashMap<String,Integer>();
-                if(favoNum == 0){
-                     favoNum = 1;
-                    data.put("favo",favoNum);
-                    favoM = "お気に入りに登録しました";
-                    QuestionListActivity.favoAdd(questionListC,favoT,favoM);
-                    favoBT.setBackgroundResource(R.drawable.favo);
-
-                }else{
-                    favoNum = 0;
-                    data.put("favo",favoNum);
-                    favoM = "お気に入りを解除しました";
-                    QuestionListActivity.favoAdd(questionListC,favoT,favoM);
-                    favoBT.setBackgroundResource(R.drawable.favo_n);
-                }
-                Log.d("test", "テスト実行");
-            }
-        });
+//        favoBT.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                favoT = "お気に入り";
+//                Map<String,Integer> data = new HashMap<String,Integer>();
+//                if(favoNum == 0){
+//                     favoNum = 1;
+//                    data.put("favo",favoNum);
+//                    favoM = "お気に入りに登録しました";
+//                    QuestionListActivity.favoAdd(questionListC,favoT,favoM);
+//                    favoBT.setBackgroundResource(R.drawable.favo);
+//
+//                }else{
+//                    favoNum = 0;
+//                    data.put("favo",favoNum);
+//                    favoM = "お気に入りを解除しました";
+//                    QuestionListActivity.favoAdd(questionListC,favoT,favoM);
+//                    favoBT.setBackgroundResource(R.drawable.favo_n);
+//                }
+//                Log.d("test", "テスト実行");
+//            }
+//        });
 
         byte[]bytes = mQuestionArrayList.get(position).getImageBytes();
         if(bytes.length != 0){
