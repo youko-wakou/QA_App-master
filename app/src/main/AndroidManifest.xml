@@ -35,6 +35,9 @@ package="jp.techacademy.wakou.youko.qa_app">
     <activity android:name=".AnswerSendActivity">
 
     </activity>
+    <activity android:name=".FavoriteActivity">
+
+    </activity>
 </application>
 
 </manifest>
