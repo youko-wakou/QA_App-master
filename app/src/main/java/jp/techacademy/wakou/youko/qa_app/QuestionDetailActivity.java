@@ -1,5 +1,6 @@
 package jp.techacademy.wakou.youko.qa_app;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +30,16 @@ public class QuestionDetailActivity extends AppCompatActivity{
     private QuestionDetailListAdapter mAdapter;
 
     private DatabaseReference mAnswerRef;
+    static void favoAdd(Context context, String title, String message){
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK",null)
+                .show();
+    }
+
+
+
     static void addFavo(Map data, Context context){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference favoRef = databaseReference.child(Const.FavoPATH);

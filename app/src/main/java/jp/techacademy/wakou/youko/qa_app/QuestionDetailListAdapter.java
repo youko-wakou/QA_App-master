@@ -81,6 +81,31 @@ public class QuestionDetailListAdapter extends BaseAdapter {
             TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
             nameTextView.setText(name);
 
+//            お気に入り機能
+
+            final Button favoBT = (Button) convertView.findViewById(R.id.favoBT);
+            favoBT.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    favoT = "お気に入り";
+                    Map<String,Integer> data = new HashMap<String,Integer>();
+                    if(favoNum == 0){
+                        favoNum = 1;
+                        data.put("favo",favoNum);
+                        favoM = "お気に入りに登録しました";
+                        QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
+                        favoBT.setBackgroundResource(R.drawable.favo);
+
+                    }else{
+                        favoNum = 0;
+                        data.put("favo",favoNum);
+                        favoM = "お気に入りを解除しました";
+                        QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
+                        favoBT.setBackgroundResource(R.drawable.favo_n);
+                    }
+
+                    QuestionDetailActivity.addFavo(data,questionListC);
+                }
+            });
             byte[] bytes = mQustion.getImageBytes();
             if (bytes.length != 0) {
                 Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length).copy(Bitmap.Config.ARGB_8888, true);
@@ -100,29 +125,6 @@ public class QuestionDetailListAdapter extends BaseAdapter {
             TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
             nameTextView.setText(name);
 
-            final Button favoBT = (Button) convertView.findViewById(R.id.favoBT);
-            favoBT.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v){
-                    favoT = "お気に入り";
-                    Map<String,Integer> data = new HashMap<String,Integer>();
-                    if(favoNum == 0){
-                        favoNum = 1;
-                        data.put("favo",favoNum);
-                        favoM = "お気に入りに登録しました";
-                        QuestionListActivity.favoAdd(questionListC,favoT,favoM);
-                        favoBT.setBackgroundResource(R.drawable.favo);
-
-                    }else{
-                        favoNum = 0;
-                        data.put("favo",favoNum);
-                        favoM = "お気に入りを解除しました";
-                        QuestionListActivity.favoAdd(questionListC,favoT,favoM);
-                        favoBT.setBackgroundResource(R.drawable.favo_n);
-                    }
-
-                    QuestionDetailActivity.addFavo(data,questionListC);
-                }
-            });
         }
         return convertView;
     }

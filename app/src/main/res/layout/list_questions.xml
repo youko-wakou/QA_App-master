@@ -43,12 +43,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/favoM"/>
-    <Button
-        android:id="@+id/favobt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/nameTextView"
-        android:layout_alignTop="@+id/titleTextView"
-        android:layout_toEndOf="@+id/titleTextView"
-        android:background="@drawable/favo_button" />
+    <!--<Button-->
+        <!--android:id="@+id/favobt"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@+id/nameTextView"-->
+        <!--android:layout_alignTop="@+id/titleTextView"-->
+        <!--android:layout_toEndOf="@+id/titleTextView"-->
+        <!--android:background="@drawable/favo_button" />-->
 </RelativeLayout>
