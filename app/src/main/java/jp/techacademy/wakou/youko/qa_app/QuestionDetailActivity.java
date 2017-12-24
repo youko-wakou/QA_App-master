@@ -38,12 +38,9 @@ public class QuestionDetailActivity extends AppCompatActivity{
                 .show();
     }
 
-
-
-    static void addFavo(Map data, Context context){
+    public static void addFavo(Map data, Context context){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference favoRef = databaseReference.child(Const.FavoPATH);
-
         favoRef.push().setValue(data,context);
     }
     private ChildEventListener mEventListener = new ChildEventListener() {

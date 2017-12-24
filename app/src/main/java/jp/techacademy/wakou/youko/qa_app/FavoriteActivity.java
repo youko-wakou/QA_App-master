@@ -78,6 +78,7 @@ public class FavoriteActivity extends AppCompatActivity {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.favorite_active);
 
+//       Intent intent = this.getIntent();
        Bundle extras = getIntent().getExtras();
        mQuestion = (Question)extras.get("question");
 
