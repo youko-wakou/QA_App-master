@@ -28,6 +28,10 @@ public class QuestionDetailActivity extends AppCompatActivity{
     private ListView mListView;
     private Question mQuestion;
     private QuestionDetailListAdapter mAdapter;
+    static Question listNum;
+//    public String getQuestionUid(){
+//        return mQuestionUid;
+//    }
 
     private DatabaseReference mAnswerRef;
     static void favoAdd(Context context, String title, String message){
@@ -38,9 +42,10 @@ public class QuestionDetailActivity extends AppCompatActivity{
                 .show();
     }
 
-    public static void addFavo(Map data, Context context){
+    public static void addFavo(Object data, DatabaseReference.CompletionListener context){
+        FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH);
+        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
         favoRef.push().setValue(data,context);
     }
     private ChildEventListener mEventListener = new ChildEventListener() {
@@ -85,13 +90,13 @@ public class QuestionDetailActivity extends AppCompatActivity{
         }
     };
     @Override
-    protected  void onCreate(Bundle savedInstanceState){
+   public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_detail);
 
         Bundle extras = getIntent().getExtras();
         mQuestion = (Question)extras.get("question");
-
+        listNum = mQuestion;
         setTitle(mQuestion.getTitle());
         mListView = (ListView)findViewById(R.id.listView);
         mAdapter = new QuestionDetailListAdapter(this,mQuestion);
@@ -117,5 +122,8 @@ public class QuestionDetailActivity extends AppCompatActivity{
         DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
         mAnswerRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(mQuestion.getGenre())).child(mQuestion.getQuestionUid()).child(Const.AnswersPATH);
         mAnswerRef.addChildEventListener(mEventListener);
+    }
+    public static String listNum(){
+       return listNum.getQuestionUid();
     }
 }

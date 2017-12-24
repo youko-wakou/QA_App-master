@@ -87,24 +87,25 @@ public class QuestionDetailListAdapter extends BaseAdapter {
             favoBT.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v){
                     favoT = "お気に入り";
+                    String lisId = QuestionDetailActivity.listNum();
                     Map<String,Integer> data = new HashMap<String,Integer>();
                     //favoNum0:お気に入りしていない　favoNum1:お気に入りしている
                     if(favoNum == 0){
                         favoNum = 1;
-                        data.put("favo",favoNum);
+                        data.put(lisId,favoNum);
                         favoM = "お気に入りに登録しました";
                         QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
                         favoBT.setBackgroundResource(R.drawable.favo);
 
                     }else{
                         favoNum = 0;
-                        data.put("favo",favoNum);
+                        data.put(lisId,favoNum);
                         favoM = "お気に入りを解除しました";
                         QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
                         favoBT.setBackgroundResource(R.drawable.favo_n);
                     }
                     //favoNum情報の登録
-                    QuestionDetailActivity.addFavo(data,questionListC);
+//                    QuestionDetailActivity.addFavo(data,questionListC);
                 }
             });
             byte[] bytes = mQustion.getImageBytes();
