@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -19,11 +20,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class QuestionDetailListAdapter extends BaseAdapter {
+public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseReference.CompletionListener{
     public Context questionListC;
     public String favoT;
     public String favoM;
     public int favoNum = 0;
+    public DatabaseReference.CompletionListener ii;
 
     private final static int TYPE_QUESTION = 0;
     private final static int TYPE_ANSWER = 1;
@@ -36,7 +38,9 @@ public class QuestionDetailListAdapter extends BaseAdapter {
         mQustion = question;
         questionListC = context;
     }
+    public void onComplete(DatabaseError databaseError,DatabaseReference databaseReference){
 
+    }
     @Override
     public int getCount() {
         return 1 + mQustion.getAnswers().size();
@@ -105,7 +109,8 @@ public class QuestionDetailListAdapter extends BaseAdapter {
                         favoBT.setBackgroundResource(R.drawable.favo_n);
                     }
                     //favoNum情報の登録
-//                    QuestionDetailActivity.addFavo(data,questionListC);
+                    ii = QuestionDetailActivity.comp();
+                    QuestionDetailActivity.addFavo(data,ii);
                 }
             });
             byte[] bytes = mQustion.getImageBytes();

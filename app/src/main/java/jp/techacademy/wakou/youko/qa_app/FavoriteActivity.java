@@ -40,7 +40,8 @@ public class FavoriteActivity extends AppCompatActivity {
                    return;
                }
            }
-           if(favomap.containsKey("favo")&&favomap.containsValue(1)){
+           String lisId = QuestionDetailActivity.listNum();
+           if(favomap.containsKey(lisId)&&favomap.containsValue(1)){
                String body = (String)favomap.get("body");
                String name = (String)favomap.get("name");
                String uid = (String)favomap.get("uid");
@@ -78,37 +79,39 @@ public class FavoriteActivity extends AppCompatActivity {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.favorite_active);
 
-//       Intent intent = this.getIntent();
-       Bundle extras = getIntent().getExtras();
-       mQuestion = (Question)extras.get("question");
+       Intent listIn = this.getIntent();
+       setTitle("お気に入り登録");
 
-       setTitle(mQuestion.getTitle());
-
-       mListView = (ListView)findViewById(R.id.listView);
-       mAdapter = new QuestionDetailListAdapter(this,mQuestion);
-       mListView.setAdapter(mAdapter);
-       mAdapter.notifyDataSetChanged();
-
-       FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
-       fab.setOnClickListener(new View.OnClickListener(){
-           @Override
-           public void onClick(View view){
-               FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-               if(user == null){
-                   Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-                   startActivity(intent);
-               }else{
-                    Intent intent = new Intent(getApplicationContext(),AnswerSendActivity.class);
-                    intent.putExtra("question",mQuestion);
-                    startActivity(intent);
-               }
-           }
-       });
-
-       DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-               mAnswerRef = databaseReference.child(Const.ContentsPATH).child(String.valueOf(mQuestion.getGenre())).child(mQuestion.getQuestionUid()).child(Const.AnswersPATH);
-               mAnswerRef.addChildEventListener(mEventListener);
+//       Bundle extras = getIntent().getExtras();
+//       mQuestion = (Question)extras.get("question");
+//
+//       setTitle(mQuestion.getTitle());
+//
+//       mListView = (ListView)findViewById(R.id.listView);
+//       mAdapter = new QuestionDetailListAdapter(this,mQuestion);
+//       mListView.setAdapter(mAdapter);
+//       mAdapter.notifyDataSetChanged();
+//
+//       FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+//       fab.setOnClickListener(new View.OnClickListener(){
+//           @Override
+//           public void onClick(View view){
+//               FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//               if(user == null){
+//                   Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+//                   startActivity(intent);
+//               }else{
+//                    Intent intent = new Intent(getApplicationContext(),AnswerSendActivity.class);
+//                    intent.putExtra("question",mQuestion);
+//                    startActivity(intent);
+//               }
+//           }
+//       });
+//
+//       DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+//               mAnswerRef = databaseReference.child(Const.ContentsPATH).child(String.valueOf(mQuestion.getGenre())).child(mQuestion.getQuestionUid()).child(Const.AnswersPATH);
+//               mAnswerRef.addChildEventListener(mEventListener);
 
    }
 }

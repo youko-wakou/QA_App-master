@@ -29,6 +29,7 @@ public class QuestionDetailActivity extends AppCompatActivity{
     private Question mQuestion;
     private QuestionDetailListAdapter mAdapter;
     static Question listNum;
+    static DatabaseReference.CompletionListener aa;
 //    public String getQuestionUid(){
 //        return mQuestionUid;
 //    }
@@ -41,12 +42,19 @@ public class QuestionDetailActivity extends AppCompatActivity{
                 .setPositiveButton("OK",null)
                 .show();
     }
+    public void onComplete(DatabaseError databaseError,DatabaseReference favoRef){
 
-    public static void addFavo(Object data, DatabaseReference.CompletionListener context){
+    }
+
+    public static void addFavo(Object data, DatabaseReference.CompletionListener comp){
         FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
-        favoRef.push().setValue(data,context);
+        favoRef.push().setValue(data,comp);
+        aa = comp;
+    }
+    static DatabaseReference.CompletionListener comp(){
+        return aa;
     }
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
