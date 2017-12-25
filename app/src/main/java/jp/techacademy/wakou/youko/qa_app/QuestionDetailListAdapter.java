@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,7 +30,7 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
     public int favoNum = 0;
     public DatabaseReference.CompletionListener ii;
     public DatabaseReference.CompletionListener rr;
-    public Map data;
+
 
     private final static int TYPE_QUESTION = 0;
     private final static int TYPE_ANSWER = 1;
@@ -96,8 +97,8 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
                 public void onClick(View v){
                     favoT = "お気に入り";
                     String lisId = QuestionDetailActivity.listNum();
+                    QuestionDetailActivity QDAs = new QuestionDetailActivity();
                     Map<String,Integer> data = new HashMap<String,Integer>();
-
                     //favoNum0:お気に入りしていない　favoNum1:お気に入りしている
                     if(favoNum == 0){
                         if(data.containsKey(lisId)&&data.containsValue(0)){
@@ -131,7 +132,14 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
                     QuestionDetailActivity QDA = new QuestionDetailActivity();
                    QDA.addFavo(data);
 
-              }
+                   //
+                    FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                    DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
+                    ChildEventListener CEL = QDA.calis();
+                    favoRef.addChildEventListener(CEL);
+//                    QDA.updateFavo(data);
+                }
             });
             byte[] bytes = mQustion.getImageBytes();
             if (bytes.length != 0) {

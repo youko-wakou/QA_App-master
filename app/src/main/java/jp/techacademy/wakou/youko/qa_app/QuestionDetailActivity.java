@@ -17,7 +17,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,7 +31,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
     private Question mQuestion;
     private QuestionDetailListAdapter mAdapter;
     static Question listNum;
-
+    public Map<String,Integer> memo;
     private DatabaseReference mAnswerRef;
     public static void favoAdd(Context context, String title, String message){
         new AlertDialog.Builder(context)
@@ -55,6 +57,71 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
             }
         });
     }
+    public void updateFavo(Map<String,Object>data){
+        FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
+        favoRef.updateChildren(data);
+    }
+//    public void updateFavo(Map<String,Integer>data){
+//        FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+//        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
+//        favoRef.setValue(data, new DatabaseReference.CompletionListener() {
+//            @Override
+//            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+//                if(databaseError != null){
+//                    System.out.println("Data could not be saved" + databaseError.getMessage());
+//                }else{
+//                    System.out.println("Data saved successfully");
+//                }
+//            }
+//        });
+//
+//    }
+    public ChildEventListener CEL = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            Object ob = dataSnapshot.getValue();
+            Object obk = dataSnapshot.getKey();
+            String obks = String.valueOf(obk);
+            Map<String,Object> lsma = new HashMap<String,Object>();
+            lsma.put(obks,ob);
+//            List<Object> obl = new ArrayList<Object>();
+//            obl.add(obk);
+//            if(obl.contains(obk)){
+//            }
+            if(lsma.containsKey(obks)){
+                updateFavo(lsma);
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+
+    };
+
+    public ChildEventListener calis(){
+        return CEL;
+    }
+
 
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
@@ -108,6 +175,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
 
         Bundle extras = getIntent().getExtras();
         mQuestion = (Question)extras.get("question");
+        //ここでリスト番号取得
         listNum = mQuestion;
         setTitle(mQuestion.getTitle());
         mListView = (ListView)findViewById(R.id.listView);
