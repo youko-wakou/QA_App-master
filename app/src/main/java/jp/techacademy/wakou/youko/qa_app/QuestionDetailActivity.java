@@ -24,38 +24,38 @@ import java.util.Map;
  * Created by appu2 on 2017/12/20.
  */
 
-public class QuestionDetailActivity extends AppCompatActivity{
+public class QuestionDetailActivity extends AppCompatActivity implements DatabaseReference.CompletionListener{
     private ListView mListView;
     private Question mQuestion;
     private QuestionDetailListAdapter mAdapter;
     static Question listNum;
-    static DatabaseReference.CompletionListener aa;
-//    public String getQuestionUid(){
-//        return mQuestionUid;
-//    }
 
     private DatabaseReference mAnswerRef;
-    static void favoAdd(Context context, String title, String message){
+    public static void favoAdd(Context context, String title, String message){
         new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton("OK",null)
                 .show();
     }
-    public void onComplete(DatabaseError databaseError,DatabaseReference favoRef){
 
-    }
 
-    public static void addFavo(Object data, DatabaseReference.CompletionListener comp){
+    public void addFavo(final Object data){
         FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
-        favoRef.push().setValue(data,comp);
-        aa = comp;
+        favoRef.push().setValue(data, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if(databaseError != null){
+                    System.out.println("Data could not be saved" + databaseError.getMessage());
+                }else{
+                    System.out.println("Data saved successfully");
+                }
+            }
+        });
     }
-    static DatabaseReference.CompletionListener comp(){
-        return aa;
-    }
+
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -97,6 +97,10 @@ public class QuestionDetailActivity extends AppCompatActivity{
 
         }
     };
+    @Override
+    public void onComplete(DatabaseError databaseError,DatabaseReference databaseReference){
+
+    }
     @Override
    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
