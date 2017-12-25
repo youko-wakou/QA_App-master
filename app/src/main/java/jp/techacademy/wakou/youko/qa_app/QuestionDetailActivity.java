@@ -58,6 +58,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         });
     }
     public void updateFavo(Map<String,Object>data){
+//        childEventListenerで呼び出す
         FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
@@ -79,6 +80,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
 //        });
 //
 //    }
+    //クリックイベントのタイミングで呼び出す
     public ChildEventListener CEL = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -87,10 +89,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
             String obks = String.valueOf(obk);
             Map<String,Object> lsma = new HashMap<String,Object>();
             lsma.put(obks,ob);
-//            List<Object> obl = new ArrayList<Object>();
-//            obl.add(obk);
-//            if(obl.contains(obk)){
-//            }
+//            lsmaにすでに選択されたリスト番号が含まれていたらupdateFavo()を呼び出して更新
             if(lsma.containsKey(obks)){
                 updateFavo(lsma);
             }
