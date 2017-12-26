@@ -38,7 +38,7 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
 
     private LayoutInflater mLayoutInflater = null;
     private Question mQustion;
-
+    private Favorite favorite;
     public QuestionDetailListAdapter(Context context, Question question) {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mQustion = question;
@@ -92,7 +92,8 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
             nameTextView.setText(name);
 
 //            お気に入り機能
-
+//            Favoriteクラス（Boolean）にボタンがtrueかfalseか保存
+            favorite = new Favorite();
             final Button favoBT = (Button) convertView.findViewById(R.id.favoBT);
             favoBT.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v){
@@ -103,13 +104,18 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
                     String lisId = QuestionDetailActivity.listNum();
                     //0が含まれるかfdataがまだ空だったらお気に入りしていない　
 //                    favoNum1:お気に入りしている　favoNum0：お気に入りしていない
-                    if(fdata.containsValue(0)||fdata.isEmpty()){
+                    if(fdata.isEmpty()){
+                        favorite.result =false;
+                    }
+                    if(favorite.result==false){
                             favoNum = 1;
+                            favorite.result = true;
                             fdata.put(lisId,favoNum);
                         favoM = "お気に入りに登録しました";
                         QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
                         favoBT.setBackgroundResource(R.drawable.favo);
                     }else{
+                            favorite.result=false;
                             favoNum = 0;
                             fdata.put(lisId,favoNum);
                             favoM = "お気に入りを解除しました";
@@ -119,9 +125,8 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
                     }
 
 //                    //favoNum情報の登録をfirebaseにする
-//                   QDA.addFavo(fdata);
-                    QDA.data(fdata);
-               }
+                    QDA.addFavo();
+                }
             });
             byte[] bytes = mQustion.getImageBytes();
             if (bytes.length != 0) {
@@ -144,6 +149,9 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
 
         }
         return convertView;
+    }
+    public Map<String,Integer> gethash(){
+        return fdata;
     }
 
 }

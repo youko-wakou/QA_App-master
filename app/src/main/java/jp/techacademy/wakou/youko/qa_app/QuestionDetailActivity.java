@@ -48,47 +48,56 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         return data;
     }
 //    firebaseに追加する
-    public void addFavo(final Object data){
+    public void addFavo(){
+        QuestionDetailListAdapter QLA = new QuestionDetailListAdapter(this,mQuestion);
+        QLA.gethash();
         FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
-        if(hash.containsKey(obk)){
-            favoRef.removeValue();
-            favoRef.setValue(data, new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                    if(databaseError != null){
-                        System.out.println("Data could not be saved"+ databaseError.getMessage());
-                    }else{
-                        System.out.println("Data saed successfully");
-                    }
+        favoRef.removeValue();
+        favoRef.setValue(data, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if(databaseError != null){
+                    System.out.println("Data could not be saved"+ databaseError.getMessage());
+                }else{
+                    System.out.println("Data saed successfully");
                 }
-            });
-        }else{
-            favoRef.push().setValue(data, new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                    if(databaseError != null){
-                        System.out.println("Data could not be saved" + databaseError.getMessage());
-                    }else{
-                        System.out.println("Data saved successfully");
-                    }
-                }
-            });
-        }
+            }
+        });
+//        if(hash.containsKey(obk)){
+//            favoRef.removeValue();
+//            favoRef.setValue(data, new DatabaseReference.CompletionListener() {
+//                @Override
+//                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+//                    if(databaseError != null){
+//                        System.out.println("Data could not be saved"+ databaseError.getMessage());
+//                    }else{
+//                        System.out.println("Data saed successfully");
+//                    }
+//                }
+//            });
+//        }else{
+//            favoRef.push().setValue(data, new DatabaseReference.CompletionListener() {
+//                @Override
+//                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+//                    if(databaseError != null){
+//                        System.out.println("Data could not be saved" + databaseError.getMessage());
+//                    }else{
+//                        System.out.println("Data saved successfully");
+//                    }
+//                }
+//            });
+//        }
     }
 
-    public DataSnapshot testData(){
-        return testData;
-    }
+
     public HashMap callmap(){
         return hash;
     }
-     //クリックイベントのタイミングで呼び出す
     public ChildEventListener CEL = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            testData = dataSnapshot;
             Object ob = dataSnapshot.getValue();
             Object obk = dataSnapshot.getKey();
             String obks = String.valueOf(obk);
