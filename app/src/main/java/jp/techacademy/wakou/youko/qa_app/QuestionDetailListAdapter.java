@@ -31,7 +31,7 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
     public DatabaseReference.CompletionListener ii;
     public DatabaseReference.CompletionListener rr;
     private Map<String,Integer> fdata = new HashMap<String,Integer>();
-
+    private String obs;
 
     private final static int TYPE_QUESTION = 0;
     private final static int TYPE_ANSWER = 1;
@@ -39,6 +39,8 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
     private LayoutInflater mLayoutInflater = null;
     private Question mQustion;
     private Favorite favorite;
+    private final QuestionDetailActivity QDA = new QuestionDetailActivity();
+
     public QuestionDetailListAdapter(Context context, Question question) {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mQustion = question;
@@ -93,31 +95,33 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
 
 //            お気に入り機能
 //            Favoriteクラス（Boolean）にボタンがtrueかfalseか保存
+            final String obs = QDA.obs();
             favorite = new Favorite();
             final Button favoBT = (Button) convertView.findViewById(R.id.favoBT);
+            if(obs == "1"){
+                favoBT.setBackgroundResource(R.drawable.favo);
+            }else{
+                favoBT.setBackgroundResource(R.drawable.favo_n);
+            }
             favoBT.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v){
-                    QuestionDetailActivity QDA = new QuestionDetailActivity();
 //                  childEventListenerを呼び出す（QuestionDetailActivityで設定）
                     favoT = "お気に入り";
 //                    ここでリスト一覧の選択したリストIDが取得できる
                     String lisId = QuestionDetailActivity.listNum();
                     //0が含まれるかfdataがまだ空だったらお気に入りしていない　
 //                    favoNum1:お気に入りしている　favoNum0：お気に入りしていない
-                    if(fdata.isEmpty()){
-                        favorite.result =false;
-                    }
-                    if(favorite.result==false){
+                    if(favorite.result==false||obs == "0"){
                             favoNum = 1;
                             favorite.result = true;
-                            fdata.put(lisId,favoNum);
+                            fdata.put("favorite",favoNum);
                         favoM = "お気に入りに登録しました";
                         QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
                         favoBT.setBackgroundResource(R.drawable.favo);
                     }else{
                             favorite.result=false;
                             favoNum = 0;
-                            fdata.put(lisId,favoNum);
+                            fdata.put("favorite",favoNum);
                             favoM = "お気に入りを解除しました";
 //                        ダイアログ呼び出し
                         QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
@@ -125,7 +129,7 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
                     }
 
 //                    //favoNum情報の登録をfirebaseにする
-                    QDA.addFavo();
+                    QDA.addFavo(fdata);
                 }
             });
             byte[] bytes = mQustion.getImageBytes();
@@ -149,9 +153,6 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
 
         }
         return convertView;
-    }
-    public Map<String,Integer> gethash(){
-        return fdata;
     }
 
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -33,9 +34,9 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
     static Question listNum;
     public Map<String,Integer> memo;
     public HashMap hash;
+    public String obs;
     public Object data;
-    public Object obk;
-    public DataSnapshot testData;
+    static Question genre;
     private DatabaseReference mAnswerRef;
     public static void favoAdd(Context context, String title, String message){
         new AlertDialog.Builder(context)
@@ -48,12 +49,12 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         return data;
     }
 //    firebaseに追加する
-    public void addFavo(){
-        QuestionDetailListAdapter QLA = new QuestionDetailListAdapter(this,mQuestion);
-        QLA.gethash();
-        FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
+    public void addFavo(Object data){
+        String num = listNum();
+        int genreI = genre();
+         FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
+        DatabaseReference favoRef = databaseReference.child(Const.ContentsPATH).child(String.valueOf(genreI)).child(num).child(Const.FavoPATH).child(favouser.getUid()).child(num);
         favoRef.removeValue();
         favoRef.setValue(data, new DatabaseReference.CompletionListener() {
             @Override
@@ -65,44 +66,15 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
                 }
             }
         });
-//        if(hash.containsKey(obk)){
-//            favoRef.removeValue();
-//            favoRef.setValue(data, new DatabaseReference.CompletionListener() {
-//                @Override
-//                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-//                    if(databaseError != null){
-//                        System.out.println("Data could not be saved"+ databaseError.getMessage());
-//                    }else{
-//                        System.out.println("Data saed successfully");
-//                    }
-//                }
-//            });
-//        }else{
-//            favoRef.push().setValue(data, new DatabaseReference.CompletionListener() {
-//                @Override
-//                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-//                    if(databaseError != null){
-//                        System.out.println("Data could not be saved" + databaseError.getMessage());
-//                    }else{
-//                        System.out.println("Data saved successfully");
-//                    }
-//                }
-//            });
-//        }
+
     }
 
-
-    public HashMap callmap(){
-        return hash;
-    }
-    public ChildEventListener CEL = new ChildEventListener() {
+    private ChildEventListener SecondListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             Object ob = dataSnapshot.getValue();
-            Object obk = dataSnapshot.getKey();
-            String obks = String.valueOf(obk);
-
-            HashMap hash = (HashMap) dataSnapshot.getValue();
+            String obs = String.valueOf(ob);
+            Log.d("kore",obs);
         }
 
         @Override
@@ -124,10 +96,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         public void onCancelled(DatabaseError databaseError) {
 
         }
-
     };
-
-
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -139,6 +108,9 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
                     return;
                 }
             }
+            Object ob = dataSnapshot.getValue();
+            String obs = String.valueOf(ob);
+
             String body = (String)map.get("body");
             String name = (String)map.get("name");
             String uid = (String)map.get("uid");
@@ -183,6 +155,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         mQuestion = (Question)extras.get("question");
         //ここでリスト番号取得
         listNum = mQuestion;
+        genre = mQuestion;
         setTitle(mQuestion.getTitle());
         mListView = (ListView)findViewById(R.id.listView);
         mAdapter = new QuestionDetailListAdapter(this,mQuestion);
@@ -201,19 +174,32 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
                     Intent intent = new Intent(getApplicationContext(),AnswerSendActivity.class);
                     intent.putExtra("question",mQuestion);
                     startActivity(intent);
-
                 }
             }
         });
         DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
         mAnswerRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(mQuestion.getGenre())).child(mQuestion.getQuestionUid()).child(Const.AnswersPATH);
         mAnswerRef.addChildEventListener(mEventListener);
+    }
+    @Override
+    public void onStart(){
+       super.onStart();
+
+        String num = listNum();
+        int genreI = genre();
         FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
-        favoRef.addChildEventListener(CEL);
+        DatabaseReference favoRef = databaseReference.child(Const.ContentsPATH).child(String.valueOf(genreI)).child(num).child(Const.FavoPATH).child(favouser.getUid()).child(num);
+        favoRef.addChildEventListener(SecondListener);
+
     }
     public static String listNum(){
        return listNum.getQuestionUid();
+    }
+    public static int genre(){
+        return genre.getGenre();
+    }
+    public String obs(){
+        return obs;
     }
 }
