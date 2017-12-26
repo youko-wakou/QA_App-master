@@ -32,6 +32,10 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
     private QuestionDetailListAdapter mAdapter;
     static Question listNum;
     public Map<String,Integer> memo;
+    public HashMap hash;
+    public Object data;
+    public Object obk;
+    public DataSnapshot testData;
     private DatabaseReference mAnswerRef;
     public static void favoAdd(Context context, String title, String message){
         new AlertDialog.Builder(context)
@@ -40,59 +44,56 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
                 .setPositiveButton("OK",null)
                 .show();
     }
-
-
+    public Object data(Object data){
+        return data;
+    }
+//    firebaseに追加する
     public void addFavo(final Object data){
         FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
-        favoRef.push().setValue(data, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if(databaseError != null){
-                    System.out.println("Data could not be saved" + databaseError.getMessage());
-                }else{
-                    System.out.println("Data saved successfully");
+        if(hash.containsKey(obk)){
+            favoRef.removeValue();
+            favoRef.setValue(data, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    if(databaseError != null){
+                        System.out.println("Data could not be saved"+ databaseError.getMessage());
+                    }else{
+                        System.out.println("Data saed successfully");
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            favoRef.push().setValue(data, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    if(databaseError != null){
+                        System.out.println("Data could not be saved" + databaseError.getMessage());
+                    }else{
+                        System.out.println("Data saved successfully");
+                    }
+                }
+            });
+        }
     }
-    public void updateFavo(Map<String,Object>data){
-//        childEventListenerで呼び出す
-        FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
-        favoRef.updateChildren(data);
+
+    public DataSnapshot testData(){
+        return testData;
     }
-//    public void updateFavo(Map<String,Integer>data){
-//        FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-//        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
-//        favoRef.setValue(data, new DatabaseReference.CompletionListener() {
-//            @Override
-//            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-//                if(databaseError != null){
-//                    System.out.println("Data could not be saved" + databaseError.getMessage());
-//                }else{
-//                    System.out.println("Data saved successfully");
-//                }
-//            }
-//        });
-//
-//    }
-    //クリックイベントのタイミングで呼び出す
+    public HashMap callmap(){
+        return hash;
+    }
+     //クリックイベントのタイミングで呼び出す
     public ChildEventListener CEL = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            testData = dataSnapshot;
             Object ob = dataSnapshot.getValue();
             Object obk = dataSnapshot.getKey();
             String obks = String.valueOf(obk);
-            Map<String,Object> lsma = new HashMap<String,Object>();
-            lsma.put(obks,ob);
-//            lsmaにすでに選択されたリスト番号が含まれていたらupdateFavo()を呼び出して更新
-            if(lsma.containsKey(obks)){
-                updateFavo(lsma);
-            }
+
+            HashMap hash = (HashMap) dataSnapshot.getValue();
         }
 
         @Override
@@ -116,10 +117,6 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         }
 
     };
-
-    public ChildEventListener calis(){
-        return CEL;
-    }
 
 
     private ChildEventListener mEventListener = new ChildEventListener() {
@@ -167,6 +164,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
     public void onComplete(DatabaseError databaseError,DatabaseReference databaseReference){
 
     }
+
     @Override
    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -201,6 +199,10 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
         mAnswerRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(mQuestion.getGenre())).child(mQuestion.getQuestionUid()).child(Const.AnswersPATH);
         mAnswerRef.addChildEventListener(mEventListener);
+        FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
+        favoRef.addChildEventListener(CEL);
     }
     public static String listNum(){
        return listNum.getQuestionUid();

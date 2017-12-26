@@ -30,6 +30,7 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
     public int favoNum = 0;
     public DatabaseReference.CompletionListener ii;
     public DatabaseReference.CompletionListener rr;
+    private Map<String,Integer> fdata = new HashMap<String,Integer>();
 
 
     private final static int TYPE_QUESTION = 0;
@@ -95,55 +96,32 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
             final Button favoBT = (Button) convertView.findViewById(R.id.favoBT);
             favoBT.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v){
+                    QuestionDetailActivity QDA = new QuestionDetailActivity();
+//                  childEventListenerを呼び出す（QuestionDetailActivityで設定）
                     favoT = "お気に入り";
 //                    ここでリスト一覧の選択したリストIDが取得できる
                     String lisId = QuestionDetailActivity.listNum();
-                    Map<String,Integer> fdata = new HashMap<String,Integer>();
                     //0が含まれるかfdataがまだ空だったらお気に入りしていない　
 //                    favoNum1:お気に入りしている　favoNum0：お気に入りしていない
                     if(fdata.containsValue(0)||fdata.isEmpty()){
-                        if(fdata.containsKey(lisId)&&fdata.containsValue(0)){
-                            favoNum = 1;
-                            fdata.remove(lisId);
-                            fdata.put(lisId,favoNum);
-
-                        }else{
                             favoNum = 1;
                             fdata.put(lisId,favoNum);
-                        }
                         favoM = "お気に入りに登録しました";
                         QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
                         favoBT.setBackgroundResource(R.drawable.favo);
-
                     }else{
-                        if(fdata.containsKey(lisId)&& fdata.containsValue(1)){
-                            favoNum = 0;
-                            fdata.remove(lisId);
-                            fdata.put(lisId,favoNum);
-                        }else{
                             favoNum = 0;
                             fdata.put(lisId,favoNum);
-                        }
-                        favoM = "お気に入りを解除しました";
+                            favoM = "お気に入りを解除しました";
 //                        ダイアログ呼び出し
                         QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
                         favoBT.setBackgroundResource(R.drawable.favo_n);
                     }
-                    QuestionDetailActivity QDA = new QuestionDetailActivity();
-
-//                  childEventListenerを呼び出す（QuestionDetailActivityで設定）
-                    FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                    DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid());
-                    ChildEventListener CEL = QDA.calis();
-                    favoRef.addChildEventListener(CEL);
 
 //                    //favoNum情報の登録をfirebaseにする
-                   QDA.addFavo(fdata);
-
-
-//                    QDA.updateFavo(data);
-                }
+//                   QDA.addFavo(fdata);
+                    QDA.data(fdata);
+               }
             });
             byte[] bytes = mQustion.getImageBytes();
             if (bytes.length != 0) {
