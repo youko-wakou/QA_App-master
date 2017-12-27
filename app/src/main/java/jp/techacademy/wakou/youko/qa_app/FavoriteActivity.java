@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -15,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,95 +26,55 @@ import java.util.HashMap;
  */
 
 public class FavoriteActivity extends AppCompatActivity {
-//   private int mGenre = 5;
-    private ListView mListView;
-   private Question mQuestion;
-   private QuestionDetailListAdapter mAdapter;
+    private ArrayList<FavoSet>mFavoriteArrayList;
+    private ChildEventListener favoriteLis = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            HashMap map = (HashMap)dataSnapshot.getValue();
 
-   private DatabaseReference mAnswerRef;
-   private ChildEventListener mEventListener = new ChildEventListener() {
-       @Override
-       public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-           HashMap favomap = (HashMap)dataSnapshot.getValue();
+            String title = (String)map.get("title");
+            String body = (String)map.get("body");
+            String name = (String)map.get("name");
+            String uid = (String)map.get("uid");
+            String imageString = (String)map.get("image");
 
-           String answerUid = dataSnapshot.getKey();
-           for(Answer answer : mQuestion.getAnswers()){
-               if(answerUid.equals(answer.getAnswerUid())){
-                   return;
-               }
-           }
-           String lisId = QuestionDetailActivity.listNum();
-           if(favomap.containsKey(lisId)&&favomap.containsValue(1)){
-               String body = (String)favomap.get("body");
-               String name = (String)favomap.get("name");
-               String uid = (String)favomap.get("uid");
+            byte[] bytes;
+            if(imageString != null){
+                bytes = Base64.decode(imageString,Base64.DEFAULT);
+            }else{
+                bytes = new byte[0];
+            }
 
-               Answer answer = new Answer(body,name,uid,answerUid);
-               mQuestion.getAnswers().add(answer);
-               mAdapter.notifyDataSetChanged();
+            ArrayList<FavoGet>favogetArrayList = new ArrayList<FavoGet>();
+            FavoGet favoget = new FavoGet(body,name,uid,answerUid);
+            FavoSet favoset = new FavoSet(title, body,  name,  uid, bytes);
+            mFavoriteArrayList.add(favoset);
 
-           }
-       }
+        }
 
-       @Override
-       public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-       }
+        }
 
-       @Override
-       public void onChildRemoved(DataSnapshot dataSnapshot) {
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-       }
+        }
 
-       @Override
-       public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-       }
+        }
 
-       @Override
-       public void onCancelled(DatabaseError databaseError) {
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
 
-       }
-   };
+        }
+    };
 
-   @Override
-    protected void onCreate(Bundle savedInstanceState){
-       super.onCreate(savedInstanceState);
-       setContentView(R.layout.favorite_active);
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
 
-       Intent listIn = this.getIntent();
-       setTitle("お気に入り登録");
-
-//       Bundle extras = getIntent().getExtras();
-//       mQuestion = (Question)extras.get("question");
-//
-//       setTitle(mQuestion.getTitle());
-//
-//       mListView = (ListView)findViewById(R.id.listView);
-//       mAdapter = new QuestionDetailListAdapter(this,mQuestion);
-//       mListView.setAdapter(mAdapter);
-//       mAdapter.notifyDataSetChanged();
-//
-//       FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
-//       fab.setOnClickListener(new View.OnClickListener(){
-//           @Override
-//           public void onClick(View view){
-//               FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//               if(user == null){
-//                   Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-//                   startActivity(intent);
-//               }else{
-//                    Intent intent = new Intent(getApplicationContext(),AnswerSendActivity.class);
-//                    intent.putExtra("question",mQuestion);
-//                    startActivity(intent);
-//               }
-//           }
-//       });
-//
-//       DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-//               mAnswerRef = databaseReference.child(Const.ContentsPATH).child(String.valueOf(mQuestion.getGenre())).child(mQuestion.getQuestionUid()).child(Const.AnswersPATH);
-//               mAnswerRef.addChildEventListener(mEventListener);
-
-   }
+    }
 }
