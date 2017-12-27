@@ -46,9 +46,16 @@ public class FavoriteActivity extends AppCompatActivity {
             }
 
             ArrayList<FavoGet>favogetArrayList = new ArrayList<FavoGet>();
-            FavoGet favoget = new FavoGet(body,name,uid,answerUid);
-            FavoSet favoset = new FavoSet(title, body,  name,  uid, bytes);
-            mFavoriteArrayList.add(favoset);
+            HashMap favomap = (HashMap)map.get("favovalu");
+            if(favomap != null){
+                for(Object key: favomap.keySet()){
+                    HashMap temp = (HashMap)favomap.get((String)key);
+                    String favoBody = (String)temp.get("favorite");
+                }
+            }
+//            FavoGet favoget = new FavoGet(body,name,uid,answerUid);
+//            FavoSet favoset = new FavoSet(title, body,  name,  uid, bytes);
+//            mFavoriteArrayList.add(favoset);
 
         }
 

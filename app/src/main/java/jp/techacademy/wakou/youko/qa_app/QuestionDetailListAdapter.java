@@ -98,7 +98,7 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
             final String obs = QDA.obs();
             favorite = new Favorite();
             final Button favoBT = (Button) convertView.findViewById(R.id.favoBT);
-            if(obs == "1"){
+            if(obs=="1"){
                 favoBT.setBackgroundResource(R.drawable.favo);
             }else{
                 favoBT.setBackgroundResource(R.drawable.favo_n);
@@ -111,7 +111,7 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
                     String lisId = QuestionDetailActivity.listNum();
                     //0が含まれるかfdataがまだ空だったらお気に入りしていない　
 //                    favoNum1:お気に入りしている　favoNum0：お気に入りしていない
-                    if(favorite.result==false||obs == "0"){
+                    if(favorite.result==false||obs=="0"){
                             favoNum = 1;
                             favorite.result = true;
                             fdata.put("favorite",favoNum);
