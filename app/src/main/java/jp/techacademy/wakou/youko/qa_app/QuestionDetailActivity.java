@@ -32,6 +32,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
     private Question mQuestion;
     private QuestionDetailListAdapter mAdapter;
     static Question listNum;
+    public Favorite favorite = new Favorite();
     public Map<String,Integer> memo;
     public HashMap hash;
     public String obs;
@@ -75,6 +76,8 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
             Object ob = dataSnapshot.getValue();
             String obs = String.valueOf(ob);
             Log.d("kore",obs);
+
+            favorite.num = obs;
         }
 
         @Override
@@ -200,6 +203,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         return genre.getGenre();
     }
     public String obs(){
+        String obs = favorite.num;
         return obs;
     }
 }

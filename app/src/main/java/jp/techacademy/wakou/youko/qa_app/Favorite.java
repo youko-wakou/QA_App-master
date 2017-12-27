@@ -10,5 +10,6 @@ import java.util.ArrayList;
 public class Favorite implements Serializable{
 
     public boolean result;
+    public String num;
 
 }

@@ -28,6 +28,7 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
     public String favoT;
     public String favoM;
     public int favoNum = 0;
+    public String num;
     public DatabaseReference.CompletionListener ii;
     public DatabaseReference.CompletionListener rr;
     private Map<String,Integer> fdata = new HashMap<String,Integer>();
@@ -95,10 +96,10 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
 
 //            お気に入り機能
 //            Favoriteクラス（Boolean）にボタンがtrueかfalseか保存
-            final String obs = QDA.obs();
             favorite = new Favorite();
+            num = QDA.obs();
             final Button favoBT = (Button) convertView.findViewById(R.id.favoBT);
-            if(obs=="1"){
+            if(num=="1"){
                 favoBT.setBackgroundResource(R.drawable.favo);
             }else{
                 favoBT.setBackgroundResource(R.drawable.favo_n);
@@ -111,7 +112,7 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
                     String lisId = QuestionDetailActivity.listNum();
                     //0が含まれるかfdataがまだ空だったらお気に入りしていない　
 //                    favoNum1:お気に入りしている　favoNum0：お気に入りしていない
-                    if(favorite.result==false||obs=="0"){
+                    if(favorite.result==false||num=="0"){
                             favoNum = 1;
                             favorite.result = true;
                             fdata.put("favorite",favoNum);
@@ -132,6 +133,7 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
                     QDA.addFavo(fdata);
                 }
             });
+
             byte[] bytes = mQustion.getImageBytes();
             if (bytes.length != 0) {
                 Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length).copy(Bitmap.Config.ARGB_8888, true);
@@ -154,5 +156,7 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
         }
         return convertView;
     }
+
+
 
 }
