@@ -7,14 +7,10 @@ import java.io.Serializable;
  */
 
 public class FavoGet implements Serializable {
-    public String mBody;
-    public String mName;
-    public String mUid;
-    public String mFavoUid;
-    public FavoGet(String body,String name,String uid,String answerUid){
-        mBody = body;
-        mName = name;
-        mUid = uid;
-        mFavoUid = answerUid;
+    public String mvalue;
+    public String mlist;
+    public FavoGet(String value,String list){
+        mvalue = value;
+        mlist = list;
     }
 }

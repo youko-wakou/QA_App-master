@@ -72,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                Question question = new Question(title,body,name,uid,dataSnapshot.getKey(),mGenre,bytes,answerArrayList);
+                Question question = new Question(title,body,name,uid,dataSnapshot.getKey(),mGenre,bytes,answerArrayList
+//                        ,isfavorite
+                );
                 mQuestionArrayList.add(question);
                 mAdapter.notifyDataSetChanged();
             }

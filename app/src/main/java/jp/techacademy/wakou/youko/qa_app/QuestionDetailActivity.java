@@ -76,7 +76,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
             Object ob = dataSnapshot.getValue();
             String obs = String.valueOf(ob);
             Log.d("kore",obs);
-
+//リストの中で選択した詳細画面のお気に入りボタンの情報を0か１で受け取る
             favorite.num = obs;
         }
 
@@ -156,6 +156,13 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
 
         Bundle extras = getIntent().getExtras();
         mQuestion = (Question)extras.get("question");
+        boolean isfavorite;
+        if(favorite.num == "0"){
+            isfavorite = false;
+        }else{
+            isfavorite = true;
+        }
+//        Question mQuestion = new Question(mQuestion.getTitle(),mQuestion.getTitle(),mQuestion.getUid(),mQuestion.getGenre(),mQuestion.getImageBytes(),mQuestion.getAnswers(),isfavorite);
         //ここでリスト番号取得
         listNum = mQuestion;
         genre = mQuestion;
@@ -202,6 +209,7 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
     public static int genre(){
         return genre.getGenre();
     }
+
     public String obs(){
         String obs = favorite.num;
         return obs;

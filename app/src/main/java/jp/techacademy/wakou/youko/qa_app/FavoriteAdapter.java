@@ -23,6 +23,7 @@ public class FavoriteAdapter extends BaseAdapter {
    private LayoutInflater mLayoutInflater = null;
    private ArrayList<Question>mQuestionArrayList;
 
+
    public FavoriteAdapter(Context context){
        mLayoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
    }

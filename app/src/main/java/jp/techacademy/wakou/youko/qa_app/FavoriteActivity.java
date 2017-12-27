@@ -27,6 +27,7 @@ import java.util.HashMap;
 
 public class FavoriteActivity extends AppCompatActivity {
     private ArrayList<FavoSet>mFavoriteArrayList;
+    private FavoriteAdapter favoadap;
     private ChildEventListener favoriteLis = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -51,11 +52,12 @@ public class FavoriteActivity extends AppCompatActivity {
                 for(Object key: favomap.keySet()){
                     HashMap temp = (HashMap)favomap.get((String)key);
                     String favoBody = (String)temp.get("favorite");
+                    FavoGet favoget = new FavoGet(favoBody,(String)key);
+                    favogetArrayList.add(favoget);
                 }
             }
-//            FavoGet favoget = new FavoGet(body,name,uid,answerUid);
-//            FavoSet favoset = new FavoSet(title, body,  name,  uid, bytes);
-//            mFavoriteArrayList.add(favoset);
+            FavoSet favoset = new FavoSet(title, body,  name,  uid, bytes);
+            mFavoriteArrayList.add(favoset);
 
         }
 
