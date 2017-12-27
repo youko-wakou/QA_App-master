@@ -17,11 +17,17 @@ public class Question implements Serializable{
     private String mQuestionUid;
     private int mGenre;
     private byte[]mBitmapArray;
-    private boolean mFavo;
+    private boolean mIsfavorite;
     private ArrayList<Answer>mAnswerArrayList;
 
     public String getTitle(){
         return mTitle;
+    }
+    public boolean getfavorite(){
+        return mIsfavorite;
+    }
+    public void setfavorite(boolean isFavorite){
+        mIsfavorite = isFavorite;
     }
     public String getBody(){
         return mBody;

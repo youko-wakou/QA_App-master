@@ -97,9 +97,9 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
 //            お気に入り機能
 //            Favoriteクラス（Boolean）にボタンがtrueかfalseか保存
             favorite = new Favorite();
-            num = QDA.obs();
+//            num = QDA.obs();
             final Button favoBT = (Button) convertView.findViewById(R.id.favoBT);
-            if(num=="1"){
+            if(mQustion.getfavorite()){
                 favoBT.setBackgroundResource(R.drawable.favo);
             }else{
                 favoBT.setBackgroundResource(R.drawable.favo_n);
@@ -112,7 +112,9 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
                     String lisId = QuestionDetailActivity.listNum();
                     //0が含まれるかfdataがまだ空だったらお気に入りしていない　
 //                    favoNum1:お気に入りしている　favoNum0：お気に入りしていない
-                    if(favorite.result==false||num=="0"){
+                    if(favorite.result==false
+//                            ||num=="0"
+                            ){
                             favoNum = 1;
                             favorite.result = true;
                             fdata.put("favorite",favoNum);

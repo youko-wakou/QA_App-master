@@ -75,11 +75,16 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             Object ob = dataSnapshot.getValue();
             String obs = String.valueOf(ob);
-            Log.d("kore",obs);
+            Log.d("kore", obs);
 //リストの中で選択した詳細画面のお気に入りボタンの情報を0か１で受け取る
-            favorite.num = obs;
+//            favorite.num = obs;
+            if (obs.equals("0")) {
+                mQuestion.setfavorite(false);
+            } else {
+                mQuestion.setfavorite(true);
+            }
+            mAdapter.notifyDataSetChanged();
         }
-
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
@@ -157,12 +162,12 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         Bundle extras = getIntent().getExtras();
         mQuestion = (Question)extras.get("question");
         boolean isfavorite;
-        if(favorite.num == "0"){
-            isfavorite = false;
-        }else{
-            isfavorite = true;
-        }
-//        Question mQuestion = new Question(mQuestion.getTitle(),mQuestion.getTitle(),mQuestion.getUid(),mQuestion.getGenre(),mQuestion.getImageBytes(),mQuestion.getAnswers(),isfavorite);
+//        if(favorite.num == "0"){
+//            isfavorite = false;
+//        }else{
+//            isfavorite = true;
+//        }
+//        Question mQuestion = new Question(mQuestion.getTitle(),mQuestion.getTitle(),mQuestion.getUid(),mQuestion.getGenre(),mQuestion.getImageBytes(),mQuestions.getAnswers(),isfavorite);
         //ここでリスト番号取得
         listNum = mQuestion;
         genre = mQuestion;
