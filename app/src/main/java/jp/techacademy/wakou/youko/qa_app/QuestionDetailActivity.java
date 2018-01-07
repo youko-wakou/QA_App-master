@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +56,9 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         int genreI = genre();
          FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference favoRef = databaseReference.child(Const.ContentsPATH).child(String.valueOf(genreI)).child(num).child(Const.FavoPATH).child(favouser.getUid()).child(num);
+//        DatabaseReference favoRef = databaseReference.child(Const.ContentsPATH).child(String.valueOf(genreI)).child(num).child(Const.FavoPATH).child(favouser.getUid()).child(num);
+//        DatabaseReference favoRef = databaseReference.child(Const.UsersPATH).child(favouser.getUid()).child(Const.FavoPATH).child(num);
+        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid()).child(num);
         favoRef.removeValue();
         favoRef.setValue(data, new DatabaseReference.CompletionListener() {
             @Override
@@ -204,7 +207,10 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
         int genreI = genre();
         FirebaseUser favouser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference favoRef = databaseReference.child(Const.ContentsPATH).child(String.valueOf(genreI)).child(num).child(Const.FavoPATH).child(favouser.getUid()).child(num);
+//        DatabaseReference favoRef = databaseReference.child(Const.ContentsPATH).child(String.valueOf(genreI)).child(num).child(Const.FavoPATH).child(favouser.getUid()).child(num);
+//        DatabaseReference favoRef = databaseReference.child(Const.UsersPATH).child(favouser.getUid()).child(Const.FavoPATH).child(num);
+//        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid()).child(num);
+        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid()).child(num);
         favoRef.addChildEventListener(SecondListener);
 
     }

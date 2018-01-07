@@ -28,37 +28,36 @@ import java.util.HashMap;
 public class FavoriteActivity extends AppCompatActivity {
     private ArrayList<FavoSet>mFavoriteArrayList;
     private FavoriteAdapter favoadap;
+    private DatabaseReference favoRef;
+    private DatabaseReference favoCallRef;
+    private FavoGet mFavoGet = new FavoGet();
+    private FirebaseUser user;
+//    お気に入り呼び出し
     private ChildEventListener favoriteLis = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            Log.d("wre","こんばんは");
+
             HashMap map = (HashMap)dataSnapshot.getValue();
+            for(Object keys: map.keySet()){
+                Log.d("debug", keys + " = " + map.get((String)keys));
 
-            String title = (String)map.get("title");
-            String body = (String)map.get("body");
-            String name = (String)map.get("name");
-            String uid = (String)map.get("uid");
-            String imageString = (String)map.get("image");
-
-            byte[] bytes;
-            if(imageString != null){
-                bytes = Base64.decode(imageString,Base64.DEFAULT);
-            }else{
-                bytes = new byte[0];
             }
-
-            ArrayList<FavoGet>favogetArrayList = new ArrayList<FavoGet>();
-            HashMap favomap = (HashMap)map.get("favovalu");
-            if(favomap != null){
+            String info = (String)dataSnapshot.getKey();
+            String favoValue = String.valueOf(map.get("favorite"));
+            if (favoValue == "1") {
+                mFavoGet.setfavomap(info,favoValue);
+                HashMap<String,String> favomap = new HashMap<String,String>();
+                favomap.put(info,favoValue);
                 for(Object key: favomap.keySet()){
-                    HashMap temp = (HashMap)favomap.get((String)key);
-                    String favoBody = (String)temp.get("favorite");
-                    FavoGet favoget = new FavoGet(favoBody,(String)key);
-                    favogetArrayList.add(favoget);
+                    Log.d("test","key = "+key);
                 }
             }
-            FavoSet favoset = new FavoSet(title, body,  name,  uid, bytes);
-            mFavoriteArrayList.add(favoset);
-
+            Log.d("test","aaaaaaaa");
+            //            ここでリスナーを再び呼び出す
+            DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+            favoCallRef = dataBaseReference.child(Const.ContentsPATH);
+            favoCallRef.addChildEventListener(mCallfavo);
         }
 
         @Override
@@ -80,10 +79,84 @@ public class FavoriteActivity extends AppCompatActivity {
         public void onCancelled(DatabaseError databaseError) {
 
         }
-    };
 
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
+    };
+//    ここでリスト呼び出し
+    private ChildEventListener mCallfavo = new ChildEventListener() {
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        HashMap listmap = (HashMap)dataSnapshot.getValue();
+        String dataKey = (String)dataSnapshot.getKey();
+//        String dataValue = String.valueOf(listmap.get(dataKey));
+//        String dataValue = (String)dataSnapshot.getKey();
+        HashMap testmap = mFavoGet.getfavomap();
+//        もしtestmapにdatakey（質問リストid)が一致するものが含まれていた場合
+//        testmapはすでにお気に入りしてあるリスト番号を指す
+//        if(testmap.containsKey(dataKey)){
+//            Log.d("test","えええええええええ");
+//        }
+        for(Object key: listmap.keySet()){
+            Log.d("getmap","key ="+key);
+            HashMap listkeyMap = (HashMap)listmap.get((String)key);
+            if(testmap.containsKey(key)) {
+
+                String title = String.valueOf(listkeyMap.get("title"));
+                String body = String.valueOf(listkeyMap.get("body"));
+                String name = String.valueOf(listkeyMap.get("name"));
+                String uid = String.valueOf(listkeyMap.get("uid"));
+            }
+        }
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
     }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+
+    }
+};
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.favorite_active);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            String name = user.getDisplayName();
+//            String uid = user.getUid();
+        }
+        Log.d("wre","こんんちは");
+        setTitle("お気に入りリスト");
+        favoadap = new FavoriteAdapter(this);
+       DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+//       favoRef = dataBaseReference.child(Const.ContentsPATH);
+//        favoRef = dataBaseReference.child(Const.UsersPATH).child(user.getUid()).child(Const.FavoPATH);
+//        favoRef = dataBaseReference.child(Const.UsersPATH).child(favouser.getUid()).child(Const.FavoPATH).child(num);
+        favoRef = dataBaseReference.child(Const.FavoPATH).child(user.getUid());
+       favoRef.addChildEventListener(favoriteLis);
+    }
+
+//    @Override
+//    public void onResume(){
+//        super.onResume();
+//        DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+//        favoRef = dataBaseReference.child(Const.ContentsPATH);
+//        favoRef.addChildEventListener(favoriteLis);
+//
+//    }
 }
+

@@ -111,24 +111,21 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
 //                    ここでリスト一覧の選択したリストIDが取得できる
                     String lisId = QuestionDetailActivity.listNum();
                     //0が含まれるかfdataがまだ空だったらお気に入りしていない　
-//                    favoNum1:お気に入りしている　favoNum0：お気に入りしていない
-                    if(favorite.result==false
-//                            ||num=="0"
-                            ){
-                            favoNum = 1;
-                            favorite.result = true;
-                            fdata.put("favorite",favoNum);
-                        favoM = "お気に入りに登録しました";
-                        QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
-                        favoBT.setBackgroundResource(R.drawable.favo);
-                    }else{
-                            favorite.result=false;
+                    if(mQustion.getfavorite()){
                             favoNum = 0;
+                            favorite.result = false;
                             fdata.put("favorite",favoNum);
-                            favoM = "お気に入りを解除しました";
-//                        ダイアログ呼び出し
+                        favoM = "お気に入りを解除しました";
                         QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
                         favoBT.setBackgroundResource(R.drawable.favo_n);
+                    }else{
+                            favorite.result=true;
+                            favoNum = 1;
+                            fdata.put("favorite",favoNum);
+                            favoM = "お気に入りを登録しました";
+//                        ダイアログ呼び出し
+                        QuestionDetailActivity.favoAdd(questionListC,favoT,favoM);
+                        favoBT.setBackgroundResource(R.drawable.favo);
                     }
 
 //                    //favoNum情報の登録をfirebaseにする
