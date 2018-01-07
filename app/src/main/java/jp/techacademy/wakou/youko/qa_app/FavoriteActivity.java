@@ -32,6 +32,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private DatabaseReference favoCallRef;
     private FavoGet mFavoGet = new FavoGet();
     private FirebaseUser user;
+    private HashMap<String,String> hashTitle = new HashMap<String,String>();
 //    お気に入り呼び出し
     private ChildEventListener favoriteLis = new ChildEventListener() {
         @Override
@@ -95,16 +96,23 @@ public class FavoriteActivity extends AppCompatActivity {
 //        if(testmap.containsKey(dataKey)){
 //            Log.d("test","えええええええええ");
 //        }
-        for(Object key: listmap.keySet()){
-            Log.d("getmap","key ="+key);
-            HashMap listkeyMap = (HashMap)listmap.get((String)key);
-            if(testmap.containsKey(key)) {
 
-                String title = String.valueOf(listkeyMap.get("title"));
-                String body = String.valueOf(listkeyMap.get("body"));
-                String name = String.valueOf(listkeyMap.get("name"));
-                String uid = String.valueOf(listkeyMap.get("uid"));
-            }
+        for(Object key: listmap.keySet()) {
+//            for (Object testmapKey : testmap.keySet()) {
+                Log.d("getmap", "key =" + key);
+                HashMap listkeyMap = (HashMap) listmap.get((String) key);
+
+                if (testmap.containsKey(key)) {
+
+                    String title = String.valueOf(listkeyMap.get("title"));
+                    String body = String.valueOf(listkeyMap.get("body"));
+                    String name = String.valueOf(listkeyMap.get("name"));
+                    String uid = String.valueOf(listkeyMap.get("uid"));
+//                    testmapの数だけHashMap（hashTitle）にtitleがputされるはず？
+                    hashTitle.put("title",title);
+                    Log.d("title",title);
+                }
+//            }
         }
     }
 
