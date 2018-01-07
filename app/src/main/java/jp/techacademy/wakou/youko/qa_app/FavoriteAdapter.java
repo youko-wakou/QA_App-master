@@ -21,7 +21,10 @@ import java.util.ArrayList;
 
 public class FavoriteAdapter extends BaseAdapter {
    private LayoutInflater mLayoutInflater = null;
-   private ArrayList<Question>mQuestionArrayList;
+   private ArrayList<FavoSet>mFavosetArrayList;
+//   private ArrayList<FavoSave>mFavoArrayList;
+//   private FavoSave favoget = new FavoSave();
+//    private FavoSet favoset = new FavoSet();
 
 
    public FavoriteAdapter(Context context){
@@ -29,11 +32,11 @@ public class FavoriteAdapter extends BaseAdapter {
    }
    @Override
    public int getCount(){
-       return mQuestionArrayList.size();
+       return mFavosetArrayList.size();
    }
    @Override
    public Object getItem(int position){
-       return mQuestionArrayList.get(position);
+       return mFavosetArrayList.get(position);
    }
    @Override
    public long getItemId(int position){
@@ -46,14 +49,14 @@ public class FavoriteAdapter extends BaseAdapter {
         }
 
         TextView favoTi = (TextView)convertView.findViewById(R.id.favoTitle);
-        favoTi.setText(mQuestionArrayList.get(position).getTitle());
+        favoTi.setText(mFavosetArrayList.get(position).getTitle());
         TextView favoNa = (TextView)convertView.findViewById(R.id.favoName);
-        favoNa.setText(mQuestionArrayList.get(position).getName());
+        favoNa.setText(mFavosetArrayList.get(position).getName());
         TextView favoRe = (TextView)convertView.findViewById(R.id.favoCount);
-        int resFavo = mQuestionArrayList.get(position).getAnswers().size();
-        favoRe.setText(String.valueOf(resFavo));
+//        int resFavo = mFavosetArrayList.get(position).getAnswers().size();
+//        favoRe.setText(String.valueOf(resFavo));
 
-        byte[] bytes = mQuestionArrayList.get(position).getImageBytes();
+        byte[] bytes = mFavosetArrayList.get(position).getImageBytes();
         if(bytes.length !=0){
             Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length).copy(Bitmap.Config.ARGB_8888,true);
             ImageView imageView = (ImageView)convertView.findViewById(R.id.favoImage);
@@ -62,7 +65,7 @@ public class FavoriteAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void  setQuestionArrayList(ArrayList<Question>questionArrayList){
-        mQuestionArrayList = questionArrayList;
+    public void  setfavoArrayList(ArrayList<FavoSet>favosetList){
+        mFavosetArrayList = favosetList;
     }
 }

@@ -8,8 +8,8 @@ import java.util.HashMap;
  */
 
 public class FavoGet implements Serializable {
-    public String mvalue;
-    public String mlist;
+
+
     public String mkey;
     public String mlisNum;
     public String getkey(){
@@ -28,8 +28,5 @@ public class FavoGet implements Serializable {
         map.put(mkey,mlisNum);
     }
 
-//    public FavoGet(String value,String list){
-//        mvalue = value;
-//        mlist = list;
-//    }
+
 }

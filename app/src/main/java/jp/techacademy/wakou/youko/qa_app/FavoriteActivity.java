@@ -32,6 +32,9 @@ public class FavoriteActivity extends AppCompatActivity {
     private DatabaseReference favoCallRef;
     private FavoGet mFavoGet = new FavoGet();
     private FirebaseUser user;
+    private ListView mListView;
+//    private ArrayList<FavoSet> favoSetArrayList;
+//    private ArrayList<FavoSave>favoSaveArrayList;
     private HashMap<String,String> hashTitle = new HashMap<String,String>();
 //    お気に入り呼び出し
     private ChildEventListener favoriteLis = new ChildEventListener() {
@@ -100,18 +103,33 @@ public class FavoriteActivity extends AppCompatActivity {
         for(Object key: listmap.keySet()) {
 //            for (Object testmapKey : testmap.keySet()) {
                 Log.d("getmap", "key =" + key);
-                HashMap listkeyMap = (HashMap) listmap.get((String) key);
+                        HashMap listkeyMap = (HashMap) listmap.get((String) key);
+//                        for(Object listkey: listkeyMap.keySet()) {
+                            if (testmap.containsKey(key)) {
 
-                if (testmap.containsKey(key)) {
-
-                    String title = String.valueOf(listkeyMap.get("title"));
-                    String body = String.valueOf(listkeyMap.get("body"));
-                    String name = String.valueOf(listkeyMap.get("name"));
-                    String uid = String.valueOf(listkeyMap.get("uid"));
+                        String title = String.valueOf(listkeyMap.get("title"));
+                        String body = String.valueOf(listkeyMap.get("body"));
+                        String name = String.valueOf(listkeyMap.get("name"));
+                        String uid = String.valueOf(listkeyMap.get("uid"));
+                        String imageString= String.valueOf(listkeyMap.get("image"));
+                        byte[] bytes;
+                        if(imageString != null){
+                            bytes = Base64.decode(imageString,Base64.DEFAULT);
+                        }else{
+                            bytes = new byte[0];
+                        }
 //                    testmapの数だけHashMap（hashTitle）にtitleがputされるはず？
-                    hashTitle.put("title",title);
-                    Log.d("title",title);
-                }
+                        hashTitle.put("title", title);
+                        Log.d("title", title);
+//                        FavoSetクラスの引数にお気に入り済みの質問iD情報を引数として渡す
+                        FavoSet favoset = new FavoSet(body,name,bytes,title,uid);
+
+//                        FavoSetの値を引き継いだArraylistにFavosetの値を渡す
+                        mFavoriteArrayList.add(favoset);
+                        favoadap.setfavoArrayList(mFavoriteArrayList);
+                        favoadap.notifyDataSetChanged();
+                    }
+//                }
 //            }
         }
     }
@@ -147,11 +165,18 @@ public class FavoriteActivity extends AppCompatActivity {
             String name = user.getDisplayName();
 //            String uid = user.getUid();
         }
+        Intent intent = getIntent();
         Log.d("wre","こんんちは");
         setTitle("お気に入りリスト");
         favoadap = new FavoriteAdapter(this);
+        ArrayList<FavoSet>mFavoriteArrayList = new ArrayList<FavoSet>();
+//        ArrayList<FavoSave>favoSaveArrayList = new ArrayList<FavoSave>();
+        mListView = (ListView) findViewById(R.id.favolist);
+        mListView.setAdapter(favoadap);
+
+        favoadap.notifyDataSetChanged();
        DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
-//       favoRef = dataBaseReference.child(Const.ContentsPATH);
+       favoRef = dataBaseReference.child(Const.ContentsPATH);
 //        favoRef = dataBaseReference.child(Const.UsersPATH).child(user.getUid()).child(Const.FavoPATH);
 //        favoRef = dataBaseReference.child(Const.UsersPATH).child(favouser.getUid()).child(Const.FavoPATH).child(num);
         favoRef = dataBaseReference.child(Const.FavoPATH).child(user.getUid());
