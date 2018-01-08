@@ -89,23 +89,30 @@ public class FavoriteActivity extends AppCompatActivity {
     private ChildEventListener mCallfavo = new ChildEventListener() {
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
         HashMap listmap = (HashMap)dataSnapshot.getValue();
         String dataKey = (String)dataSnapshot.getKey();
+        mFavoGet.setmaplist(dataKey,listmap);
 //        String dataValue = String.valueOf(listmap.get(dataKey));
 //        String dataValue = (String)dataSnapshot.getKey();
         HashMap testmap = mFavoGet.getfavomap();
+        HashMap mapGet = mFavoGet.getmaplist();
 //        もしtestmapにdatakey（質問リストid)が一致するものが含まれていた場合
 //        testmapはすでにお気に入りしてあるリスト番号を指す
 //        if(testmap.containsKey(dataKey)){
 //            Log.d("test","えええええええええ");
 //        }
 
-        for(Object key: listmap.keySet()) {
+//        ★ここを一度無効
+        for(Object key: mapGet.keySet()) {
 //            for (Object testmapKey : testmap.keySet()) {
                 Log.d("getmap", "key =" + key);
-                        HashMap listkeyMap = (HashMap) listmap.get((String) key);
+//            mFavoGet.setmaplist("listmap",key);
+                        HashMap listkeyMap = (HashMap) mapGet.get((String) key);
+
 //                        for(Object listkey: listkeyMap.keySet()) {
                             if (testmap.containsKey(key)) {
+
 
                         String title = String.valueOf(listkeyMap.get("title"));
                         String body = String.valueOf(listkeyMap.get("body"));
@@ -132,6 +139,7 @@ public class FavoriteActivity extends AppCompatActivity {
 //                }
 //            }
         }
+//        ★ここまで
     }
 
     @Override
@@ -170,13 +178,14 @@ public class FavoriteActivity extends AppCompatActivity {
         setTitle("お気に入りリスト");
         favoadap = new FavoriteAdapter(this);
         ArrayList<FavoSet>mFavoriteArrayList = new ArrayList<FavoSet>();
+        favoadap.setfavoArrayList(mFavoriteArrayList);
 //        ArrayList<FavoSave>favoSaveArrayList = new ArrayList<FavoSave>();
         mListView = (ListView) findViewById(R.id.favolist);
         mListView.setAdapter(favoadap);
 
         favoadap.notifyDataSetChanged();
        DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
-       favoRef = dataBaseReference.child(Const.ContentsPATH);
+//       favoRef = dataBaseReference.child(Const.ContentsPATH);
 //        favoRef = dataBaseReference.child(Const.UsersPATH).child(user.getUid()).child(Const.FavoPATH);
 //        favoRef = dataBaseReference.child(Const.UsersPATH).child(favouser.getUid()).child(Const.FavoPATH).child(num);
         favoRef = dataBaseReference.child(Const.FavoPATH).child(user.getUid());
