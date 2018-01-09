@@ -34,6 +34,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private FavoGet mFavoGet = new FavoGet();
     private FirebaseUser user;
     private ListView mListView;
+    private int count;
 //    private ArrayList<FavoSet> favoSetArrayList;
 //    private ArrayList<FavoSave>favoSaveArrayList;
     private HashMap<String,String> hashTitle = new HashMap<String,String>();
@@ -62,8 +63,14 @@ public class FavoriteActivity extends AppCompatActivity {
             Log.d("test","aaaaaaaa");
             //            ここでリスナーを再び呼び出す
             DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
-            favoCallRef = dataBaseReference.child(Const.ContentsPATH);
-            favoCallRef.addChildEventListener(mCallfavo);
+            for(int count = 1;count<=4;count++){
+//                DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+                favoCallRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(count));
+                favoCallRef.addChildEventListener(mCallfavo);
+            }
+//            favoCallRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(count));
+//            favoCallRef = dataBaseReference.child(Const.ContentsPATH);
+//            favoCallRef.addChildEventListener(mCallfavo);
         }
 
         @Override
@@ -94,14 +101,15 @@ public class FavoriteActivity extends AppCompatActivity {
 
         HashMap listmap = (HashMap)dataSnapshot.getValue();
         String dataKey = (String)dataSnapshot.getKey();
-        mFavoGet.setmaplist("list",listmap);
+        mFavoGet.setmaplist(dataKey,listmap);
 //        String dataValue = String.valueOf(listmap.get(dataKey));
 //        String dataValue = (String)dataSnapshot.getKey();
         HashMap testmap = mFavoGet.getfavomap();
         HashMap mapGet = mFavoGet.getmaplist();
-        HashMap mapQuestion = (HashMap)mapGet.get("list");
+//        変更
+        HashMap mapQuestion = (HashMap)mapGet.get(dataKey);
 //        HashMap mm = mapQuestion;
-        System.out.println("リスト"+mapQuestion);
+//        System.out.println("リスト"+mapQuestion);
 //        もしtestmapにdatakey（質問リストid)が一致するものが含まれていた場合
 //        testmapはすでにお気に入りしてあるリスト番号を指す
 //        if(testmap.containsKey(dataKey)){
@@ -109,15 +117,18 @@ public class FavoriteActivity extends AppCompatActivity {
 //        }
 
 //        ★ここを一度無効
-        for(Object key: mapQuestion.keySet()) {
+//      変更
+//        for(Object key: mapQuestion.keySet()) {
 //            for (Object testmapKey : testmap.keySet()) {
-            System.out.println("ここも"+key);
+//        変更
+//            System.out.println("ここも"+key);
 //                Log.d("getmap", "key =" + key);
 //            mFavoGet.setmaplist("listmap",key);
-                        HashMap listkeyMap = (HashMap) mapQuestion.get((String) key);
+                        // 変更
+//                        HashMap listkeyMap = (HashMap) mapQuestion.get((String) key);
 
 //                        for(Object listkey: listkeyMap.keySet()) {
-                            if (testmap.containsKey(key)) {
+                            if (testmap.containsKey(dataKey)) {
 
 
                         String title = String.valueOf(mapQuestion.get("title"));
@@ -141,7 +152,8 @@ public class FavoriteActivity extends AppCompatActivity {
                         mFavoriteArrayList.add(favoset);
                         favoadap.setfavoArrayList(mFavoriteArrayList);
                         favoadap.notifyDataSetChanged();
-                    }
+//                    }
+//                              変更
 //                }
 //            }
         }
@@ -184,6 +196,7 @@ public class FavoriteActivity extends AppCompatActivity {
         setTitle("お気に入りリスト");
         favoadap = new FavoriteAdapter(this);
         ArrayList<FavoSet>mFavoriteArrayList = new ArrayList<FavoSet>();
+        mFavoriteArrayList.clear();
         favoadap.setfavoArrayList(mFavoriteArrayList);
 //        ArrayList<FavoSave>favoSaveArrayList = new ArrayList<FavoSave>();
         mListView = (ListView) findViewById(R.id.favolist);
