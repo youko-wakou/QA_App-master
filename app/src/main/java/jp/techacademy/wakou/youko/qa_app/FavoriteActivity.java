@@ -101,13 +101,14 @@ public class FavoriteActivity extends AppCompatActivity {
 
         HashMap listmap = (HashMap)dataSnapshot.getValue();
         String dataKey = (String)dataSnapshot.getKey();
-        mFavoGet.setmaplist(dataKey,listmap);
+
+//        mFavoGet.setmaplist(dataKey,listmap);
 //        String dataValue = String.valueOf(listmap.get(dataKey));
 //        String dataValue = (String)dataSnapshot.getKey();
         HashMap testmap = mFavoGet.getfavomap();
-        HashMap mapGet = mFavoGet.getmaplist();
+//        HashMap mapGet = mFavoGet.getmaplist();
 //        変更
-        HashMap mapQuestion = (HashMap)mapGet.get(dataKey);
+//        HashMap mapQuestion = (HashMap)mapGet.get(dataKey);
 //        HashMap mm = mapQuestion;
 //        System.out.println("リスト"+mapQuestion);
 //        もしtestmapにdatakey（質問リストid)が一致するものが含まれていた場合
@@ -128,14 +129,14 @@ public class FavoriteActivity extends AppCompatActivity {
 //                        HashMap listkeyMap = (HashMap) mapQuestion.get((String) key);
 
 //                        for(Object listkey: listkeyMap.keySet()) {
-                            if (testmap.containsKey(dataKey)) {
+//                            if (testmap.containsKey(dataKey)) {
 
 
-                        String title = String.valueOf(mapQuestion.get("title"));
-                        String body = String.valueOf(mapQuestion.get("body"));
-                        String name = String.valueOf(mapQuestion.get("name"));
-                        String uid = String.valueOf(mapQuestion.get("uid"));
-                        String imageString= String.valueOf(mapQuestion.get("image"));
+                        String title = String.valueOf(listmap.get("title"));
+                        String body = String.valueOf(listmap.get("body"));
+                        String name = String.valueOf(listmap.get("name"));
+                        String uid = String.valueOf(listmap.get("uid"));
+                        String imageString= String.valueOf(listmap.get("image"));
                         byte[] bytes;
                         if(imageString != null){
                             bytes = Base64.decode(imageString,Base64.DEFAULT);
@@ -145,18 +146,35 @@ public class FavoriteActivity extends AppCompatActivity {
 //                    testmapの数だけHashMap（hashTitle）にtitleがputされるはず？
                         hashTitle.put("title", title);
                         Log.d("title", title);
+
+                        ArrayList<FavoAnswer>answerArrayList = new ArrayList<FavoAnswer>();
+                        HashMap answerMap = (HashMap)listmap.get("answers");
+                        if(answerMap != null){
+                            for(Object key: answerMap.keySet()){
+                                HashMap tempAnswer = (HashMap)answerMap.get((String)key);
+                                String Abody = (String)tempAnswer.get("body");
+                                String Aname = (String)tempAnswer.get("name");
+                                String Auid = (String)tempAnswer.get("uid");
+
+                                FavoAnswer favoanswer = new FavoAnswer(Abody,Aname,Auid,(String)key);
+                                answerArrayList.add(favoanswer);
+                            }
+                        }
 //                        FavoSetクラスの引数にお気に入り済みの質問iD情報を引数として渡す
-                        FavoSet favoset = new FavoSet(body,name,bytes,title,uid);
+                        FavoSet favoset = new FavoSet(body,name,bytes,title,uid,answerArrayList);
 
 //                        FavoSetの値を引き継いだArraylistにFavosetの値を渡す
-                        mFavoriteArrayList.add(favoset);
-                        favoadap.setfavoArrayList(mFavoriteArrayList);
-                        favoadap.notifyDataSetChanged();
+                        if (testmap.containsKey(dataKey)) {
+                            mFavoriteArrayList.add(favoset);
+                            favoadap.setfavoArrayList(mFavoriteArrayList);
+                            favoadap.notifyDataSetChanged();
+                         }
+
 //                    }
 //                              変更
 //                }
 //            }
-        }
+//        }
 //        ★ここまで
     }
 

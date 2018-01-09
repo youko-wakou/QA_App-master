@@ -1,6 +1,7 @@
 package jp.techacademy.wakou.youko.qa_app;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -38,7 +39,8 @@ public class FavoGet implements Serializable {
     public HashMap<String,String> getfavomap(){
        return map;
     }
-    public void setfavomap(String key,String value){
+
+    public void setfavomap(String key, String value){
         mkey = key;
         mlisNum = value;
         map.put(mkey,mlisNum);

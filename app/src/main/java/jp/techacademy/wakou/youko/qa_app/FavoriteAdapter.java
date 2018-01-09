@@ -53,8 +53,8 @@ public class FavoriteAdapter extends BaseAdapter {
         TextView favoNa = (TextView)convertView.findViewById(R.id.favoName);
         favoNa.setText(mFavosetArrayList.get(position).getName());
         TextView favoRe = (TextView)convertView.findViewById(R.id.favoCount);
-//        int resFavo = mFavosetArrayList.get(position).getAnswers().size();
-//        favoRe.setText(String.valueOf(resFavo));
+        int resFavo = mFavosetArrayList.get(position).getAnswers().size();
+        favoRe.setText(String.valueOf(resFavo));
 
         byte[] bytes = mFavosetArrayList.get(position).getImageBytes();
         if(bytes.length !=0){
