@@ -61,16 +61,12 @@ public class FavoriteActivity extends AppCompatActivity {
                 }
             }
             Log.d("test","aaaaaaaa");
-            //            ここでリスナーを再び呼び出す
-            DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
-            for(int count = 1;count<=4;count++){
-//                DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
-                favoCallRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(count));
-                favoCallRef.addChildEventListener(mCallfavo);
-            }
-//            favoCallRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(count));
-//            favoCallRef = dataBaseReference.child(Const.ContentsPATH);
-//            favoCallRef.addChildEventListener(mCallfavo);
+            //            ここでリスナーを再び呼び出す（移動）
+//            DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+//            for(int count = 1;count<=4;count++){
+//                favoCallRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(count));
+//                favoCallRef.addChildEventListener(mCallfavo);
+//            }
         }
 
         @Override
@@ -98,6 +94,10 @@ public class FavoriteActivity extends AppCompatActivity {
     private ChildEventListener mCallfavo = new ChildEventListener() {
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//        呼び出し位置移動
+        DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+        favoRef = dataBaseReference.child(Const.FavoPATH).child(user.getUid());
+        favoRef.addChildEventListener(favoriteLis);
 
         HashMap listmap = (HashMap)dataSnapshot.getValue();
         String dataKey = (String)dataSnapshot.getKey();
@@ -105,6 +105,7 @@ public class FavoriteActivity extends AppCompatActivity {
 //        mFavoGet.setmaplist(dataKey,listmap);
 //        String dataValue = String.valueOf(listmap.get(dataKey));
 //        String dataValue = (String)dataSnapshot.getKey();
+
         HashMap testmap = mFavoGet.getfavomap();
 //        HashMap mapGet = mFavoGet.getmaplist();
 //        変更
@@ -222,12 +223,15 @@ public class FavoriteActivity extends AppCompatActivity {
         mListView.setAdapter(favoadap);
 
         favoadap.notifyDataSetChanged();
-       DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
-//       favoRef = dataBaseReference.child(Const.ContentsPATH);
-//        favoRef = dataBaseReference.child(Const.UsersPATH).child(user.getUid()).child(Const.FavoPATH);
-//        favoRef = dataBaseReference.child(Const.UsersPATH).child(favouser.getUid()).child(Const.FavoPATH).child(num);
-        favoRef = dataBaseReference.child(Const.FavoPATH).child(user.getUid());
-       favoRef.addChildEventListener(favoriteLis);
+//       DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+//        favoRef = dataBaseReference.child(Const.FavoPATH).child(user.getUid());
+//       favoRef.addChildEventListener(favoriteLis);
+//       変更呼び出し部分追加
+        DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+        for(int count = 1;count<=4;count++){
+            favoCallRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(count));
+            favoCallRef.addChildEventListener(mCallfavo);
+        }
     }
 
 //    @Override
