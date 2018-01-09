@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -43,13 +44,14 @@ public class FavoriteActivity extends AppCompatActivity {
             Log.d("wre","こんばんは");
 
             HashMap map = (HashMap)dataSnapshot.getValue();
-            for(Object keys: map.keySet()){
-                Log.d("debug", keys + " = " + map.get((String)keys));
+            for(Object keys: map.values()){
+//                Log.d("debug", keys + " = " + map.get((String)keys));
+                System.out.println("こちら"+keys);
 
             }
             String info = (String)dataSnapshot.getKey();
             String favoValue = String.valueOf(map.get("favorite"));
-            if (favoValue == "1") {
+            if (favoValue.equals("1")) {
                 mFavoGet.setfavomap(info,favoValue);
                 HashMap<String,String> favomap = new HashMap<String,String>();
                 favomap.put(info,favoValue);
@@ -92,11 +94,14 @@ public class FavoriteActivity extends AppCompatActivity {
 
         HashMap listmap = (HashMap)dataSnapshot.getValue();
         String dataKey = (String)dataSnapshot.getKey();
-        mFavoGet.setmaplist(dataKey,listmap);
+        mFavoGet.setmaplist("list",listmap);
 //        String dataValue = String.valueOf(listmap.get(dataKey));
 //        String dataValue = (String)dataSnapshot.getKey();
         HashMap testmap = mFavoGet.getfavomap();
         HashMap mapGet = mFavoGet.getmaplist();
+        HashMap mapQuestion = (HashMap)mapGet.get("list");
+//        HashMap mm = mapQuestion;
+        System.out.println("リスト"+mapQuestion);
 //        もしtestmapにdatakey（質問リストid)が一致するものが含まれていた場合
 //        testmapはすでにお気に入りしてあるリスト番号を指す
 //        if(testmap.containsKey(dataKey)){
@@ -104,21 +109,22 @@ public class FavoriteActivity extends AppCompatActivity {
 //        }
 
 //        ★ここを一度無効
-        for(Object key: mapGet.keySet()) {
+        for(Object key: mapQuestion.keySet()) {
 //            for (Object testmapKey : testmap.keySet()) {
-                Log.d("getmap", "key =" + key);
+            System.out.println("ここも"+key);
+//                Log.d("getmap", "key =" + key);
 //            mFavoGet.setmaplist("listmap",key);
-                        HashMap listkeyMap = (HashMap) mapGet.get((String) key);
+                        HashMap listkeyMap = (HashMap) mapQuestion.get((String) key);
 
 //                        for(Object listkey: listkeyMap.keySet()) {
                             if (testmap.containsKey(key)) {
 
 
-                        String title = String.valueOf(listkeyMap.get("title"));
-                        String body = String.valueOf(listkeyMap.get("body"));
-                        String name = String.valueOf(listkeyMap.get("name"));
-                        String uid = String.valueOf(listkeyMap.get("uid"));
-                        String imageString= String.valueOf(listkeyMap.get("image"));
+                        String title = String.valueOf(mapQuestion.get("title"));
+                        String body = String.valueOf(mapQuestion.get("body"));
+                        String name = String.valueOf(mapQuestion.get("name"));
+                        String uid = String.valueOf(mapQuestion.get("uid"));
+                        String imageString= String.valueOf(mapQuestion.get("image"));
                         byte[] bytes;
                         if(imageString != null){
                             bytes = Base64.decode(imageString,Base64.DEFAULT);
