@@ -27,7 +27,7 @@ import java.util.HashMap;
  */
 
 public class FavoriteActivity extends AppCompatActivity {
-    private ArrayList<FavoSet>mFavoriteArrayList;
+    private ArrayList<FavoSet>mFavoriteArrayList = new ArrayList<FavoSet>();
     private FavoriteAdapter favoadap;
     private DatabaseReference favoRef;
     private DatabaseReference favoCallRef;
@@ -165,7 +165,7 @@ public class FavoriteActivity extends AppCompatActivity {
 
 //                        FavoSetの値を引き継いだArraylistにFavosetの値を渡す
                         if (testmap.containsKey(dataKey)) {
-                            ArrayList<FavoSet>mFavoriteArrayList = new ArrayList<FavoSet>();
+
                             mFavoriteArrayList.add(favoset);
                             favoadap.setfavoArrayList(mFavoriteArrayList);
                             favoadap.notifyDataSetChanged();
