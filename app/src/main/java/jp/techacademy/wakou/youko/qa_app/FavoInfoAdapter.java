@@ -61,7 +61,9 @@ public class FavoInfoAdapter extends BaseAdapter {
             String name = mFavoset.getName();
 
             TextView bodyTextView = (TextView)convertView.findViewById(R.id.fovorite_question);
+            bodyTextView.setText(body);
             TextView nameTextView = (TextView)convertView.findViewById(R.id.favorite_name);
+            nameTextView.setText(name);
 
             byte[] bytes = mFavoset.getImageBytes();
             if(bytes.length != 0){

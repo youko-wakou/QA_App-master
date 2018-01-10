@@ -78,7 +78,7 @@ public class FavoInfoActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        mAnswerRef = databaseReference.child(Const.ContentsPATH).child(String.valueOf(mFavoset)).child(mFavoset.getQuestionUid()).child(Const.AnswersPATH);
+        mAnswerRef = databaseReference.child(Const.ContentsPATH).child(mFavoset.getGenre()).child(mFavoset.getQuestionUid()).child(Const.AnswersPATH);
         mAnswerRef.addChildEventListener(mEventListner);
     }
 }

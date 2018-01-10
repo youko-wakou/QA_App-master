@@ -37,7 +37,9 @@ public class FavoriteActivity extends AppCompatActivity {
     private FavoGet mFavoGet = new FavoGet();
     private FirebaseUser user;
     private ListView mListView;
+    private String mCount;
     private int count;
+    private String Count;
 //    private ArrayList<FavoSet> favoSetArrayList;
 //    private ArrayList<FavoSave>favoSaveArrayList;
     private HashMap<String,String> hashTitle = new HashMap<String,String>();
@@ -170,8 +172,9 @@ public class FavoriteActivity extends AppCompatActivity {
                                 answerArrayList.add(favoanswer);
                             }
                         }
+//                            Count = getcountest();
 //                        FavoSetクラスの引数にお気に入り済みの質問iD情報を引数として渡す
-                        FavoSet favoset = new FavoSet(body,name,bytes,title,uid,answerArrayList,dataKey);
+                        FavoSet favoset = new FavoSet(body,name,bytes,title,uid,answerArrayList,dataKey,String.valueOf(count));
 
 //                        FavoSetの値を引き継いだArraylistにFavosetの値を渡す
                         if (testmap.containsKey(dataKey)) {
@@ -242,6 +245,7 @@ public class FavoriteActivity extends AppCompatActivity {
         favoRef.addChildEventListener(favoriteLis);
         for(int count = 1;count<=4;count++){
             favoCallRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(count));
+//            countset(String.valueOf(count));
             favoCallRef.addChildEventListener(mCallfavo);
         }
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -254,7 +258,12 @@ public class FavoriteActivity extends AppCompatActivity {
             }
         });
     }
-
+//    private void countset(String count){
+//        mCount = count;
+//    }
+//    private String getcountest(){
+//        return mCount;
+//    }
 
 //    @Override
 //    public void onResume(){
