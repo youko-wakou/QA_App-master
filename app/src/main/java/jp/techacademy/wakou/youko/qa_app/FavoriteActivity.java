@@ -29,6 +29,8 @@ import java.util.HashMap;
 
 public class FavoriteActivity extends AppCompatActivity {
     private ArrayList<FavoSet>mFavoriteArrayList = new ArrayList<FavoSet>();
+    private ArrayList<FavoSet>mArraylist = new ArrayList<FavoSet>();
+    private ArrayList<FavoSet>favoriteList;
     private FavoriteAdapter favoadap;
     private DatabaseReference favoRef;
     private DatabaseReference favoCallRef;
@@ -91,6 +93,12 @@ public class FavoriteActivity extends AppCompatActivity {
         }
 
     };
+    private ArrayList<FavoSet>getarraylist(){
+        return mArraylist;
+    }
+    private void setarraylist(ArrayList<FavoSet>arraylist){
+        mArraylist = arraylist;
+    }
 //    ここでリスト呼び出し
     private ChildEventListener mCallfavo = new ChildEventListener() {
     @Override
@@ -169,6 +177,7 @@ public class FavoriteActivity extends AppCompatActivity {
                         if (testmap.containsKey(dataKey)) {
 
                             mFavoriteArrayList.add(favoset);
+                            setarraylist(mFavoriteArrayList);
                             favoadap.setfavoArrayList(mFavoriteArrayList);
                             favoadap.notifyDataSetChanged();
                          }
@@ -239,7 +248,8 @@ public class FavoriteActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?>parent,View view,int position,long id){
                 Intent intent = new Intent(getApplicationContext(),FavoInfoActivity.class);
-                intent.putExtra("question",mFavoriteArrayList.get(position));
+                favoriteList = getarraylist();
+                intent.putExtra("question",favoriteList.get(position));
                 startActivity(intent);
             }
         });
