@@ -13,6 +13,7 @@ public class FavoSet implements Serializable{
     public String mname;
     public String mtitle;
     public String mbody;
+    public String mQuestionUid;
     public ArrayList<FavoAnswer>mFavoanswer;
 
     //    public FavoSet(String title, String body, String name, String uid, byte[]bytes){
@@ -34,13 +35,17 @@ public class FavoSet implements Serializable{
     public String getUid(){
         return muid;
     }
+    public String getQuestionUid(){
+        return mQuestionUid;
+    }
     public byte[] getImageBytes(){
         return mimage;
     }
     public ArrayList<FavoAnswer>getAnswers(){
         return mFavoanswer;
     }
-    public FavoSet(String body,String name,byte[] image,String title,String uid,ArrayList<FavoAnswer>favoanswer){
+    public FavoSet(String body,String name,byte[] image,String title,String uid,ArrayList<FavoAnswer>favoanswer,String questionUid){
+        mQuestionUid = questionUid;
         mbody = body;
         mname = name;
         mFavoanswer = favoanswer;

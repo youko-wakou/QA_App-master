@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -162,7 +163,7 @@ public class FavoriteActivity extends AppCompatActivity {
                             }
                         }
 //                        FavoSetクラスの引数にお気に入り済みの質問iD情報を引数として渡す
-                        FavoSet favoset = new FavoSet(body,name,bytes,title,uid,answerArrayList);
+                        FavoSet favoset = new FavoSet(body,name,bytes,title,uid,answerArrayList,dataKey);
 
 //                        FavoSetの値を引き継いだArraylistにFavosetの値を渡す
                         if (testmap.containsKey(dataKey)) {
@@ -234,7 +235,16 @@ public class FavoriteActivity extends AppCompatActivity {
             favoCallRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(count));
             favoCallRef.addChildEventListener(mCallfavo);
         }
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?>parent,View view,int position,long id){
+                Intent intent = new Intent(getApplicationContext(),FavoInfoActivity.class);
+                intent.putExtra("question",mFavoriteArrayList.get(position));
+                startActivity(intent);
+            }
+        });
     }
+
 
 //    @Override
 //    public void onResume(){
