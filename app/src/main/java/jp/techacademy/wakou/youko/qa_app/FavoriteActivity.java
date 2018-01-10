@@ -95,9 +95,9 @@ public class FavoriteActivity extends AppCompatActivity {
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 //        呼び出し位置移動
-        DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
-        favoRef = dataBaseReference.child(Const.FavoPATH).child(user.getUid());
-        favoRef.addChildEventListener(favoriteLis);
+//        DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+//        favoRef = dataBaseReference.child(Const.FavoPATH).child(user.getUid());
+//        favoRef.addChildEventListener(favoriteLis);
 
         HashMap listmap = (HashMap)dataSnapshot.getValue();
         String dataKey = (String)dataSnapshot.getKey();
@@ -228,6 +228,8 @@ public class FavoriteActivity extends AppCompatActivity {
 //       favoRef.addChildEventListener(favoriteLis);
 //       変更呼び出し部分追加
         DatabaseReference dataBaseReference = FirebaseDatabase.getInstance().getReference();
+        favoRef = dataBaseReference.child(Const.FavoPATH).child(user.getUid());
+        favoRef.addChildEventListener(favoriteLis);
         for(int count = 1;count<=4;count++){
             favoCallRef = dataBaseReference.child(Const.ContentsPATH).child(String.valueOf(count));
             favoCallRef.addChildEventListener(mCallfavo);
