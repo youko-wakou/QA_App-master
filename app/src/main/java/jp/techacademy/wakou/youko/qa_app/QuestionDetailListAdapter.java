@@ -29,7 +29,6 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
     public String favoM;
     public int favoNum = 0;
     public String num;
-    public DatabaseReference.CompletionListener ii;
     public DatabaseReference.CompletionListener rr;
     private Map<String,Integer> fdata = new HashMap<String,Integer>();
     private String obs;
@@ -99,6 +98,12 @@ public class QuestionDetailListAdapter extends BaseAdapter implements DatabaseRe
             favorite = new Favorite();
 //            num = QDA.obs();
             final Button favoBT = (Button) convertView.findViewById(R.id.favoBT);
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if(user == null){
+                favoBT.setVisibility(View.GONE);
+            }else{
+                favoBT.setVisibility(View.VISIBLE);
+            }
             if(mQustion.getfavorite()){
                 favoBT.setBackgroundResource(R.drawable.favo);
             }else{

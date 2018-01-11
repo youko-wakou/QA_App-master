@@ -210,9 +210,10 @@ public class QuestionDetailActivity extends AppCompatActivity implements Databas
 //        DatabaseReference favoRef = databaseReference.child(Const.ContentsPATH).child(String.valueOf(genreI)).child(num).child(Const.FavoPATH).child(favouser.getUid()).child(num);
 //        DatabaseReference favoRef = databaseReference.child(Const.UsersPATH).child(favouser.getUid()).child(Const.FavoPATH).child(num);
 //        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid()).child(num);
-        DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid()).child(num);
-        favoRef.addChildEventListener(SecondListener);
-
+        if(favouser != null) {
+            DatabaseReference favoRef = databaseReference.child(Const.FavoPATH).child(favouser.getUid()).child(num);
+            favoRef.addChildEventListener(SecondListener);
+        }
     }
     public static String listNum(){
        return listNum.getQuestionUid();

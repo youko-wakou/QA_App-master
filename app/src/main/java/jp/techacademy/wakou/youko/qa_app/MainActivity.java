@@ -164,28 +164,45 @@ public class MainActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        MenuItem favoMenuItem = menu.findItem(R.id.nav_favorite);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user == null){
+            favoMenuItem.setVisible(false);
+        }else{
+            favoMenuItem.setVisible(true);
+        }
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(MenuItem item){
                 int id=item.getItemId();
-                if(id == R.id.nav_hobby){
-                    mToolbar.setTitle("趣味");
-                    mGenre = 1;
-                }else if(id == R.id.nav_life){
-                    mToolbar.setTitle("生活");
-                    mGenre = 2;
-                }else if(id == R.id.nav_health){
-                    mToolbar.setTitle("健康");
-                    mGenre = 3;
-                }else if(id== R.id.nav_compter){
-                    mToolbar.setTitle("コンピューター");
-                    mGenre = 4;
-                }else if(id==R.id.nav_favorite){
-                    mToolbar.setTitle("お気に入り");
-                    mGenre = 5;
-                    Intent listIn = new Intent(getApplicationContext(),FavoriteActivity.class);
-                    startActivityForResult(listIn,0);
-                 }
+
+                    if (id == R.id.nav_hobby) {
+                        mToolbar.setTitle("趣味");
+                        mGenre = 1;
+                    } else if (id == R.id.nav_life) {
+                        mToolbar.setTitle("生活");
+                        mGenre = 2;
+                    } else if (id == R.id.nav_health) {
+                        mToolbar.setTitle("健康");
+                        mGenre = 3;
+                    } else if (id == R.id.nav_compter) {
+                        mToolbar.setTitle("コンピューター");
+                        mGenre = 4;
+                    } else if (id == R.id.nav_favorite) {
+                            mToolbar.setTitle("お気に入り");
+                            mGenre = 5;
+                            Intent listIn = new Intent(getApplicationContext(), FavoriteActivity.class);
+                            startActivityForResult(listIn, 0);
+                    }
+
+//                else if(id==R.id.nav_favorite){
+//                    mToolbar.setTitle("お気に入り");
+//                    mGenre = 5;
+//                    Intent listIn = new Intent(getApplicationContext(),FavoriteActivity.class);
+//                    startActivityForResult(listIn,0);
+//                 }
 
                 DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
